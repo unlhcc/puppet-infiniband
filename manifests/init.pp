@@ -1,41 +1,70 @@
 # == Class: infiniband
 #
-# Full description of class infiniband here.
+# Manage the necessary packages and services to support Infiniband.
 #
 # === Parameters
 #
 # Document parameters here.
 #
-# [*sample_parameter*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
+# [*infiniband_support_packages*]
+#   Array of package names to install the infiniband support.
 #
-# === Variables
+# [*optional_infiniband_packages*]
+#   Array of package names to install the optional infiniband support.
 #
-# Here you should define a list of variables that this module would require.
+# [*with_optional_packages*]
+#   Boolean that determines if the optional packages will be installed.
 #
-# [*sample_variable*]
-#   Explanation of how this variable affects the funtion of this class and if it
-#   has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#   External Node Classifier as a comma separated list of hostnames." (Note,
-#   global variables should not be used in preference to class parameters  as of
-#   Puppet 2.6.)
+# [*rdma_service_name*]
+#   Service name for RDMA.
+#
+# [*rdma_service_has_status*]
+#   Boolean to set if RDMA service has status option.
+#
+# [*rdma_service_has_restart*]
+#   Boolean to set if RDMA service has restart option.
 #
 # === Examples
 #
 #  class { infiniband:
-#    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ]
+#    with_optional_packages => true
 #  }
 #
 # === Authors
 #
-# Author Name <author@domain.com>
+# Trey Dockendorf <treydock@gmail.com>
 #
 # === Copyright
 #
-# Copyright 2013 Your name here, unless otherwise noted.
+# Copyright 2013 Trey Dockendorf
 #
-class infiniband {
+class infiniband (
+  $infiniband_support_packages  = $infiniband::params::infiniband_support_packages,
+  $optional_infiniband_packages = $infiniband::params::optional_infiniband_packages,
+  $with_optional_packages       = $infiniband::params::with_optional_packages,
+  $rdma_service_name            = $infiniband::params::rdma_service_name,
+  $rdma_service_has_status      = $infiniband::params::rdma_service_has_status,
+  $rdma_service_has_restart     = $infiniband::params::rdma_service_has_restart
 
+) inherits infiniband::params {
+
+  package { $infiniband_support_packages:
+    ensure  => 'present',
+  }
+
+  if $with_optional_packages {
+    package { $optional_infiniband_packages:
+      ensure  => 'present',
+    }
+  }
+
+  service { 'rdma':
+    ensure      => 'running',
+    enable      => true,
+    name        => $rdma_service_name,
+    hasstatus   => $rdma_service_has_status,
+    hasrestart  => $rdma_service_has_restart,
+    require     => Package['rdma'],
+  }
 
 }
