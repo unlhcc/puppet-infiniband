@@ -4,7 +4,6 @@
 
 * Ruby 1.8.7
 * Bundler
-* [puppet-pear](https://github.com/rafaelfelix/puppet-pear)
 
 ## Running tests
 
