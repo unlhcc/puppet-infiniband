@@ -38,11 +38,16 @@ class infiniband::params {
         'infiniband-diags',
         'perftest',
         'mstflint',
+        'qperf',
+        'opensm',
       ]
       $with_optional_packages         = true
       $rdma_service_name              = 'rdma'
       $rdma_service_has_status        = true
       $rdma_service_has_restart       = true
+      $opensm_service_name            = 'opensm'
+      $opensm_service_has_status      = true
+      $opensm_service_has_restart     = true
     }
 
     default: {

@@ -24,6 +24,15 @@
 # [*rdma_service_has_restart*]
 #   Boolean to set if RDMA service has restart option.
 #
+# [*opensm_service_name*]
+#   Service name for opensm.
+#
+# [*opensm_service_has_status*]
+#   Boolean to set if opensm service has status option.
+#
+# [*opensm_service_has_restart*]
+#   Boolean to set if opensm service has restart option.
+#
 # === Examples
 #
 #  class { infiniband:
@@ -44,7 +53,10 @@ class infiniband (
   $with_optional_packages       = $infiniband::params::with_optional_packages,
   $rdma_service_name            = $infiniband::params::rdma_service_name,
   $rdma_service_has_status      = $infiniband::params::rdma_service_has_status,
-  $rdma_service_has_restart     = $infiniband::params::rdma_service_has_restart
+  $rdma_service_has_restart     = $infiniband::params::rdma_service_has_restart,
+  $opensm_service_name          = $infiniband::params::opensm_service_name,
+  $opensm_service_has_status    = $infiniband::params::opensm_service_has_status,
+  $opensm_service_has_restart   = $infiniband::params::opensm_service_has_restart
 
 ) inherits infiniband::params {
 
@@ -65,6 +77,15 @@ class infiniband (
     hasstatus   => $rdma_service_has_status,
     hasrestart  => $rdma_service_has_restart,
     require     => Package['rdma'],
+  }
+
+  service { 'opensm':
+    ensure      => 'running',
+    enable      => true,
+    name        => $opensm_service_name,
+    hasstatus   => $opensm_service_has_status,
+    hasrestart  => $opensm_service_has_restart,
+    require     => Package['opensm'],
   }
 
 }

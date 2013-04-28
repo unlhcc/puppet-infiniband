@@ -37,6 +37,8 @@ describe 'infiniband' do
     'infiniband-diags',
     'perftest',
     'mstflint',
+    'qperf',
+    'opensm',
   ]
 
   optional_packages.each do |optional_package|
@@ -51,6 +53,17 @@ describe 'infiniband' do
       'hasstatus'   => 'true',
       'hasrestart'  => 'true',
       'require'     => 'Package[rdma]',
+    })
+  end
+
+  it do
+    should contain_service('opensm').with({
+      'ensure'      => 'running',
+      'enable'      => 'true',
+      'name'        => 'opensm',
+      'hasstatus'   => 'true',
+      'hasrestart'  => 'true',
+      'require'     => 'Package[opensm]',
     })
   end
 end
