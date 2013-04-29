@@ -56,7 +56,7 @@ class infiniband::params {
   }
 
   case $::has_infiniband {
-    true : {
+    /true/ : {
       $rdma_service_ensure    = 'running'
       $rdma_service_enable    = true
       $opensm_service_ensure  = 'running'
