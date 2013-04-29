@@ -51,9 +51,13 @@ class infiniband (
   $infiniband_support_packages  = $infiniband::params::infiniband_support_packages,
   $optional_infiniband_packages = $infiniband::params::optional_infiniband_packages,
   $with_optional_packages       = $infiniband::params::with_optional_packages,
+  $rdma_service_ensure          = $infiniband::params::rdma_service_ensure,
+  $rdma_service_enable          = $infiniband::params::rdma_service_enable,
   $rdma_service_name            = $infiniband::params::rdma_service_name,
   $rdma_service_has_status      = $infiniband::params::rdma_service_has_status,
   $rdma_service_has_restart     = $infiniband::params::rdma_service_has_restart,
+  $opensm_service_ensure        = $infiniband::params::opensm_service_ensure,
+  $opensm_service_enable        = $infiniband::params::opensm_service_enable,
   $opensm_service_name          = $infiniband::params::opensm_service_name,
   $opensm_service_has_status    = $infiniband::params::opensm_service_has_status,
   $opensm_service_has_restart   = $infiniband::params::opensm_service_has_restart
@@ -71,8 +75,8 @@ class infiniband (
   }
 
   service { 'rdma':
-    ensure      => 'running',
-    enable      => true,
+    ensure      => $rdma_service_ensure,
+    enable      => $rdma_service_enable,
     name        => $rdma_service_name,
     hasstatus   => $rdma_service_has_status,
     hasrestart  => $rdma_service_has_restart,
@@ -80,8 +84,8 @@ class infiniband (
   }
 
   service { 'opensm':
-    ensure      => 'running',
-    enable      => true,
+    ensure      => $opensm_service_ensure,
+    enable      => $opensm_service_enable,
     name        => $opensm_service_name,
     hasstatus   => $opensm_service_has_status,
     hasrestart  => $opensm_service_has_restart,

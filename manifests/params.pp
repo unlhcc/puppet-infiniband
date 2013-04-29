@@ -55,4 +55,20 @@ class infiniband::params {
     }
   }
 
+  case $::has_infiniband {
+    true : {
+      $rdma_service_ensure    = 'running'
+      $rdma_service_enable    = true
+      $opensm_service_ensure  = 'running'
+      $opensm_service_enable  = true
+    }
+
+    default : {
+      $rdma_service_ensure    = 'stopped'
+      $rdma_service_enable    = false
+      $opensm_service_ensure  = 'stopped'
+      $opensm_service_enable  = false
+    }
+  }
+
 }

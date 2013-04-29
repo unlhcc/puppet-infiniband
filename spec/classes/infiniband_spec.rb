@@ -5,6 +5,7 @@ describe 'infiniband' do
   let :facts do
     {
       :osfamily                 => 'RedHat',
+      :has_infiniband           => true,
     }
   end
 
@@ -65,5 +66,28 @@ describe 'infiniband' do
       'hasrestart'  => 'true',
       'require'     => 'Package[opensm]',
     })
+  end
+  
+  context "has_infiniband is false" do
+    let :facts do
+      {
+        :osfamily                 => 'RedHat',
+        :has_infiniband           => false,
+      }
+    end
+
+    it do
+      should contain_service('rdma').with({
+        'ensure'      => 'stopped',
+        'enable'      => 'false',
+      })
+    end
+
+    it do
+      should contain_service('opensm').with({
+        'ensure'      => 'stopped',
+        'enable'      => 'false',
+      })
+    end
   end
 end
