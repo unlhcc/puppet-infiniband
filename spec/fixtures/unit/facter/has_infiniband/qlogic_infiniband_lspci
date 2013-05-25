@@ -1,0 +1,5 @@
+03:00.0 Ethernet controller: Intel Corporation 82574L Gigabit Network Connection
+04:00.0 Ethernet controller: Intel Corporation 82574L Gigabit Network Connection
+05:00.0 Serial Attached SCSI controller: LSI Logic / Symbios Logic SAS2308 PCI-Express Fusion-MPT SAS-2 (rev 05)
+06:00.0 InfiniBand: QLogic Corp. IBA7322 QDR InfiniBand HCA (rev 02)
+07:00.0 Ethernet controller: Chelsio Communications Inc T320 10GbE Dual Port Adapter
