@@ -39,7 +39,6 @@ describe 'infiniband' do
     'perftest',
     'mstflint',
     'qperf',
-    'opensm',
   ]
 
   optional_packages.each do |optional_package|
@@ -56,17 +55,6 @@ describe 'infiniband' do
       'require'     => 'Package[rdma]',
     })
   end
-
-  it do
-    should contain_service('opensm').with({
-      'ensure'      => 'running',
-      'enable'      => 'true',
-      'name'        => 'opensm',
-      'hasstatus'   => 'true',
-      'hasrestart'  => 'true',
-      'require'     => 'Package[opensm]',
-    })
-  end
   
   context "has_infiniband is false" do
     let :facts do
@@ -78,13 +66,6 @@ describe 'infiniband' do
 
     it do
       should contain_service('rdma').with({
-        'ensure'      => 'stopped',
-        'enable'      => 'false',
-      })
-    end
-
-    it do
-      should contain_service('opensm').with({
         'ensure'      => 'stopped',
         'enable'      => 'false',
       })

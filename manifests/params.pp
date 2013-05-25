@@ -39,15 +39,11 @@ class infiniband::params {
         'perftest',
         'mstflint',
         'qperf',
-        'opensm',
       ]
       $with_optional_packages         = true
       $rdma_service_name              = 'rdma'
       $rdma_service_has_status        = true
       $rdma_service_has_restart       = true
-      $opensm_service_name            = 'opensm'
-      $opensm_service_has_status      = true
-      $opensm_service_has_restart     = true
     }
 
     default: {
@@ -59,15 +55,11 @@ class infiniband::params {
     /true/ : {
       $rdma_service_ensure    = 'running'
       $rdma_service_enable    = true
-      $opensm_service_ensure  = 'running'
-      $opensm_service_enable  = true
     }
 
     default : {
       $rdma_service_ensure    = 'stopped'
       $rdma_service_enable    = false
-      $opensm_service_ensure  = 'stopped'
-      $opensm_service_enable  = false
     }
   }
 
