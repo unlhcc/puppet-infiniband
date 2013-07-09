@@ -1,10 +1,20 @@
+# Fact: has_infiniband
+#
+# Purpose: Determine if the system's hardware supports InfiniBand.
+#
+# Resolution:
+#   Returns true or false based on output from `lspci`.
+#
+# Caveats:
+#   Currently only tested with Mellanox and Qlogic cards installed in a system.
+#
+
+require 'facter/util/infiniband'
+
 Facter.add(:has_infiniband) do
   confine :kernel => "Linux"
   setcode do
-    if Facter::Util::Resolution.which('lspci')
-      lspci = Facter::Util::Resolution.exec('lspci')
-      ib_device_count = lspci.scan(/(InfiniBand: |(Network controller|Ethernet controller|Memory controller): Mellanox Technolog)/m).flatten.reject {|s| s.nil?}
-      ib_device_count.length > 0
-    end
+    ib_device_count = Facter::Util::Infiniband.count_ib_devices
+    ib_device_count > 0
   end
 end

@@ -2,11 +2,12 @@ source "https://rubygems.org"
 
 group :development, :test do
   gem 'rake'
+  # Temporary until rpsec-puppet 2.0 is released
+  gem 'rspec-puppet', :git => 'git@github.com:rodjek/rspec-puppet.git', :ref => '36812b3', :require => false
   gem 'puppetlabs_spec_helper', :require => false
-  gem 'puppet-lint', '~> 0.3.2'
+  gem 'puppet-lint'
   gem 'travis-lint'
-  gem 'rspec-system', :git => 'git://github.com/treydock/rspec-system.git'
-  gem 'rspec-system-puppet', '~>1.0.0'
+  gem 'rspec-system-puppet', '~>2.0.0'
 end
 
 if puppetversion = ENV['PUPPET_GEM_VERSION']

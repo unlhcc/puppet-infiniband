@@ -46,18 +46,19 @@ class infiniband (
   $rdma_service_enable          = $infiniband::params::rdma_service_enable,
   $rdma_service_name            = $infiniband::params::rdma_service_name,
   $rdma_service_has_status      = $infiniband::params::rdma_service_has_status,
-  $rdma_service_has_restart     = $infiniband::params::rdma_service_has_restart
-
+  $rdma_service_has_restart     = $infiniband::params::rdma_service_has_restart,
+  $interfaces                   = $infiniband::params::interfaces
 ) inherits infiniband::params {
 
-  package { $infiniband_support_packages:
-    ensure  => 'present',
-  }
+  validate_array($infiniband_support_packages)
+  validate_array($optional_infiniband_packages)
+  validate_bool($with_optional_packages)
+  validate_hash($interfaces)
+
+  ensure_packages($infiniband_support_packages)
 
   if $with_optional_packages {
-    package { $optional_infiniband_packages:
-      ensure  => 'present',
-    }
+    ensure_packages($optional_infiniband_packages)
   }
 
   service { 'rdma':
@@ -67,6 +68,10 @@ class infiniband (
     hasstatus   => $rdma_service_has_status,
     hasrestart  => $rdma_service_has_restart,
     require     => Package['rdma'],
+  }
+
+  if $interfaces and !empty($interfaces) {
+    create_resources('infiniband::interface', $interfaces)
   }
 
 }
