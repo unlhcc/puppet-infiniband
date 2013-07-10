@@ -8,6 +8,7 @@ group :development, :test do
   gem 'puppet-lint'
   gem 'travis-lint'
   gem 'rspec-system-puppet', '~>2.0.0'
+  gem 'ci_reporter'
 end
 
 if puppetversion = ENV['PUPPET_GEM_VERSION']
