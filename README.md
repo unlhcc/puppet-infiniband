@@ -38,6 +38,10 @@ Creates the ifcfg file for an IBoIP interface
 
 Determine if the system's hardware supports InfiniBand.
 
+### infiniband_fw_version
+
+Reports the firmware version of the InfiniBand interface card.
+
 ## Development
 
 ### Dependencies
