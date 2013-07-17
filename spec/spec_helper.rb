@@ -1,3 +1,7 @@
+# Added as Puppet 3.0.x was failing rspec tests with 'unknown function validate_array'
+fixture_path = File.expand_path(File.join(__FILE__, '..', 'fixtures'))
+$LOAD_PATH.unshift File.join(fixture_path, 'modules', 'stdlib', 'lib')
+
 ## This is a nasty collection of rspec-puppet and puppetlabs_spec_helper
 ## pieces to allow rspec-puppet git master to be used with some useful
 ## fixture helpers provided by puppetlabs_spec_helper
@@ -5,7 +9,6 @@
 ## rspec-puppet ##
 require 'rspec-puppet'
 
-fixture_path = File.expand_path(File.join(__FILE__, '..', 'fixtures'))
 
 RSpec.configure do |c|
   c.module_path = File.join(fixture_path, 'modules')
