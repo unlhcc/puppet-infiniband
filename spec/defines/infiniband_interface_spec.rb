@@ -29,14 +29,7 @@ describe 'infiniband::interface' do
 
   it do
     should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0') \
-      .with_content(/^DEVICE="ib0"$/) \
-      .with_content(/^BOOTPROTO="none"$/) \
-      .with_content(/^NM_CONTROLLED="no"$/) \
-      .with_content(/^ONBOOT="yes"$/) \
-      .with_content(/^TYPE="InfiniBand"$/) \
-      .with_content(/^IPADDR="#{params[:ipaddr]}"$/) \
-      .with_content(/^NETMASK="#{params[:netmask]}"$/) \
-      .with_content(/^CONNECTED_MODE="yes"$/)
+      .with_content(my_fixture_read('ifcfg-ib0_with_connected_mode'))
   end
 
   context 'ensure => absent' do
@@ -52,7 +45,7 @@ describe 'infiniband::interface' do
       default_params.merge({:enable => 'no'})
     end
     
-    it { should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with_content(/^ONBOOT="no"$/) }
+    it { should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with_content(my_fixture_read('ifcfg-ib0_with_onboot_no')) }
   end
 
   context 'connected_mode => no' do
@@ -60,7 +53,7 @@ describe 'infiniband::interface' do
       default_params.merge({:connected_mode => 'no'})
     end
     
-    it { should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with_content(/^CONNECTED_MODE="no"$/) }
+    it { should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with_content(my_fixture_read('ifcfg-ib0_without_connected_mode')) }
   end
 end
 

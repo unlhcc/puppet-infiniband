@@ -53,7 +53,7 @@ class infiniband (
   validate_array($infiniband_support_packages)
   validate_array($optional_infiniband_packages)
   validate_bool($with_optional_packages)
-  validate_hash($interfaces)
+  if $interfaces { validate_hash($interfaces) }
 
   ensure_packages($infiniband_support_packages)
 

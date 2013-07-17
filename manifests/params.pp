@@ -68,7 +68,7 @@ class infiniband::params {
   }
 
   $interfaces = $::infiniband_interfaces ? {
-    undef   => hash([]),
+    undef   => false,
     default => $::infiniband_interfaces,
   }
 

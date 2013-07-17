@@ -37,6 +37,8 @@ end
 require 'puppetlabs_spec_helper/puppetlabs_spec/files'
 require 'puppetlabs_spec_helper/puppetlabs_spec/fixtures'
 
+require 'facter'
+
 RSpec.configure do |config|
   # Include PuppetlabsSpec helpers so they can be called at convenience
   config.extend PuppetlabsSpec::Files
