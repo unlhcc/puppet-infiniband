@@ -1,4 +1,6 @@
 class Facter::Util::Infiniband
+  LSPCI_IB_REGEX = /^(.*)\sInfiniBand \[0c06\].*$/
+
   # Returns the number of InfiniBand interfaces found
   # in lspci output
   #
@@ -7,8 +9,8 @@ class Facter::Util::Infiniband
   # @api private
   def self.count_ib_devices
     if Facter::Util::Resolution.which('lspci')
-      lspci = Facter::Util::Resolution.exec('lspci')
-      matches = lspci.scan(/(InfiniBand: |(Network controller|Ethernet controller|Memory controller): Mellanox Technolog)/m)
+      lspci = Facter::Util::Resolution.exec('lspci -nn')
+      matches = lspci.scan(LSPCI_IB_REGEX)
       matches.flatten.reject {|s| s.nil?}.length
     end
   end
@@ -20,9 +22,10 @@ class Facter::Util::Infiniband
   # @api private
   def self.get_device_id
     if Facter::Util::Resolution.which('lspci')
-      output = Facter::Util::Resolution.exec('lspci -d 15b3:')
-      id = output.split(" ").first unless output.nil?
-      id
+      output = Facter::Util::Resolution.exec('lspci -nn')
+      if output.match(LSPCI_IB_REGEX)
+        $1
+      end
     end
   end
 

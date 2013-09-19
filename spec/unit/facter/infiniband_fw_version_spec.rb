@@ -16,7 +16,7 @@ describe 'infiniband_fw_version fact' do
   end
 
   it "should be nil if device_id not found" do
-    Facter::Util::Resolution.stubs(:exec).with('lspci -d 15b3:').returns(nil)
+    Facter::Util::Resolution.stubs(:exec).with('lspci -nn').returns(nil)
     Facter::Util::Infiniband.expects(:get_fw_version).returns(nil)
     Facter.fact(:infiniband_fw_version).value.should == nil
   end
@@ -28,7 +28,7 @@ describe 'infiniband_fw_version fact' do
   end
 
   it "should be nil if mstflint query returns nil" do
-    Facter::Util::Resolution.stubs(:exec).with("mstflint -device 03:00.0 -qq query").returns(nil)
+    Facter::Util::Resolution.stubs(:exec).with("mstflint -device 83:00.0 -qq query").returns(nil)
     Facter::Util::Infiniband.expects(:get_fw_version).returns(nil)
     Facter.fact(:infiniband_fw_version).value.should == nil
   end
