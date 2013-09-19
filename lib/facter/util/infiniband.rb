@@ -21,7 +21,7 @@ class Facter::Util::Infiniband
   def self.get_device_id
     if Facter::Util::Resolution.which('lspci')
       output = Facter::Util::Resolution.exec('lspci -d 15b3:')
-      id = output.split(" ").first
+      id = output.split(" ").first unless output.nil?
       id
     end
   end
@@ -32,9 +32,12 @@ class Facter::Util::Infiniband
   #
   # @api private
   def self.get_fw_version
-    device_id = self.get_device_id
+    device_id = Facter::Util::Infiniband.get_device_id
+    return nil unless device_id
+
     if Facter::Util::Resolution.which('mstflint')
       output = Facter::Util::Resolution.exec("mstflint -device #{device_id} -qq query")
+      return nil unless output
       matches = output.scan(/^FW Version:\s+([0-9\.]+)$/m)
       fw_version = matches.flatten.reject { |o| o.nil? }.first
       return fw_version
