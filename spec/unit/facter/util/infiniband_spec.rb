@@ -3,17 +3,19 @@ require 'facter/util/infiniband'
 
 describe Facter::Util::Infiniband do
 
-  before :each do
-    Facter.fact(:kernel).stubs(:value).returns("Linux")
-    Facter.fact(:has_infiniband).stubs(:value).returns(true)
-    Facter::Util::Resolution.stubs(:which).with("lspci").returns("/sbin/lspci")
-    Facter::Util::Resolution.stubs(:which).with("mstflint").returns("/usr/bin/mstflint")
+  after do
+    Facter.clear
   end
 
   describe 'get_device_id' do
     it "should return a device ID" do
       Facter::Util::Resolution.stubs(:exec).with("lspci -d 15b3:").returns(my_fixture_read('mellanox_lspci'))
       Facter::Util::Infiniband.get_device_id.should == '03:00.0'
+    end
+    
+    it "should return false if no device ID found" do
+      Facter::Util::Resolution.stubs(:exec).with("lspci -d 15b3:").returns(nil)
+      Facter::Util::Infiniband.get_device_id.should be_nil
     end
   end
 
