@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'facter/util/file_read'
 
 describe 'infiniband_fw_version fact' do
   
