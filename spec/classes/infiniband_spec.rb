@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe 'infiniband' do
+  include_context :defaults
+
+  let(:facts) { default_facts }
 
   let :interfaces_example do
     { 'ib0' => {'ipaddr' => '192.168.1.1', 'netmask'  => '255.255.255.0'} }
@@ -56,9 +59,86 @@ describe 'infiniband' do
       'require'     => 'Package[rdma]',
     })
   end
+
+  it do
+    should contain_shellvar('infiniband IPOIB_LOAD').with({
+      'ensure'    => 'present',
+      'target'    => '/etc/rdma/rdma.conf',
+      'notify'    => 'Service[rdma]',
+      'require'   => 'Package[rdma]',
+      'variable'  => 'IPOIB_LOAD',
+      'value'     => 'yes',
+    })
+  end
+
+  it do
+    should contain_shellvar('infiniband SRP_LOAD').with({
+      'ensure'    => 'present',
+      'target'    => '/etc/rdma/rdma.conf',
+      'notify'    => 'Service[rdma]',
+      'require'   => 'Package[rdma]',
+      'variable'  => 'SRP_LOAD',
+      'value'     => 'no',
+    })
+  end
+
+  it do
+    should contain_shellvar('infiniband ISER_LOAD').with({
+      'ensure'    => 'present',
+      'target'    => '/etc/rdma/rdma.conf',
+      'notify'    => 'Service[rdma]',
+      'require'   => 'Package[rdma]',
+      'variable'  => 'ISER_LOAD',
+      'value'     => 'no',
+    })
+  end
+
+  it do
+    should contain_shellvar('infiniband RDS_LOAD').with({
+      'ensure'    => 'present',
+      'target'    => '/etc/rdma/rdma.conf',
+      'notify'    => 'Service[rdma]',
+      'require'   => 'Package[rdma]',
+      'variable'  => 'RDS_LOAD',
+      'value'     => 'no',
+    })
+  end
+
+  it do
+    should contain_shellvar('infiniband FIXUP_MTRR_REGS').with({
+      'ensure'    => 'present',
+      'target'    => '/etc/rdma/rdma.conf',
+      'notify'    => 'Service[rdma]',
+      'require'   => 'Package[rdma]',
+      'variable'  => 'FIXUP_MTRR_REGS',
+      'value'     => 'no',
+    })
+  end
+
+  it do
+    should contain_shellvar('infiniband NFSoRDMA_LOAD').with({
+      'ensure'    => 'present',
+      'target'    => '/etc/rdma/rdma.conf',
+      'notify'    => 'Service[rdma]',
+      'require'   => 'Package[rdma]',
+      'variable'  => 'NFSoRDMA_LOAD',
+      'value'     => 'yes',
+    })
+  end
+
+  it do
+    should contain_shellvar('infiniband NFSoRDMA_PORT').with({
+      'ensure'    => 'present',
+      'target'    => '/etc/rdma/rdma.conf',
+      'notify'    => 'Service[rdma]',
+      'require'   => 'Package[rdma]',
+      'variable'  => 'NFSoRDMA_PORT',
+      'value'     => '2050',
+    })
+  end
   
   context "has_infiniband is false" do
-    let(:facts) {{ :has_infiniband => false }}
+    let(:facts) { default_facts.merge({:has_infiniband => false }) }
 
     it do
       should contain_service('rdma').with({
@@ -94,7 +174,7 @@ describe 'infiniband' do
   end
 
   context "with top-scope variable infiniband_interfaces defined" do
-    let(:facts) {{ :infiniband_interfaces => interfaces_example }}
+    let(:facts) {default_facts.merge({:infiniband_interfaces => interfaces_example }) }
 
     include_context 'interfaces'
   end
@@ -109,5 +189,19 @@ describe 'infiniband' do
      it 'should raise error' do
        expect raise_error(Puppet::Error, /false is not a Hash/)
      end
+  end
+
+  [
+    'ipoib_load',
+    'srp_load',
+    'iser_load',
+    'rds_load',
+    'fixup_mtrr_regs',
+    'nfsordma_load',
+  ].each do |p|
+    context "when #{p} => 'foo'" do
+      let(:params) {{ p.to_sym => 'foo' }}
+      it { expect { should create_class('infiniband') }.to raise_error(Puppet::Error, /does not match \["\^yes\$", "\^no\$"\]/) }
+    end
   end
 end

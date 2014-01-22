@@ -48,6 +48,7 @@ class infiniband::params {
       $rdma_service_name              = 'rdma'
       $rdma_service_has_status        = true
       $rdma_service_has_restart       = true
+      $rdma_conf_path                 = '/etc/rdma/rdma.conf'
     }
 
     default: {

@@ -15,10 +15,13 @@ require 'facter/util/infiniband'
 Facter.add(:infiniband_fw_version) do
   confine :kernel => "Linux"
   confine :has_infiniband => true
-  fw_version = Facter::Util::Infiniband.get_fw_version
-  if fw_version
-    setcode do
-      fw_version
+  ports = Facter::Util::Infiniband.get_ports
+  if ports
+    fw_version = Facter::Util::Infiniband.get_port_fw_version(ports.first)
+    if fw_version
+      setcode do
+        fw_version
+      end
     end
   end
 end

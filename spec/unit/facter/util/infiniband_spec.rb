@@ -24,34 +24,36 @@ describe Facter::Util::Infiniband do
     end
   end
 
-  describe 'get_device_id' do
-    it "should return 83:00.0 when matching a Mellanox device" do
-      Facter::Util::Resolution.stubs(:exec).with("lspci -nn").returns(my_fixture_read('mellanox_lspci_1'))
-      Facter::Util::Infiniband.get_device_id.should == '83:00.0'
-    end
-
-    it "should return 02:00.0 when matching a QLogic device" do
-      Facter::Util::Resolution.stubs(:exec).with("lspci -nn").returns(my_fixture_read('qlogic_lspci_1'))
-      Facter::Util::Infiniband.get_device_id.should == '02:00.0'
-    end
-    
-    it "should return nil when no matching IB device" do
-      Facter::Util::Resolution.stubs(:exec).with("lspci -nn").returns(my_fixture_read('noib_lspci_1'))
-      Facter::Util::Infiniband.get_device_id.should be_nil
+  describe 'get_port_fw_version' do
+    it 'should return fw_ver for mlx devices' do
+      Facter::Util::Infiniband.expects(:read_fw_version).with("/sys/class/infiniband/mlx4_0/fw_ver").returns("2.9.1200")
+      Facter::Util::Infiniband.get_port_fw_version("mlx4_0").should == "2.9.1200"
     end
   end
 
-  describe 'get_fw_version' do
-    it "should return a FW Version" do
-      Facter::Util::Resolution.stubs(:exec).with("mstflint -device 83:00.0 -qq query").returns(my_fixture_read('mellanox_mstflint_1'))
-      Facter::Util::Infiniband.get_fw_version.should == '2.9.1200'
+  describe 'get_ports' do
+    before :each do
+      Facter::Util::Resolution.stubs(:which).with("ibstat").returns("/usr/sbin/ibstat")
     end
-=begin
-    # This doesn't work...WHY?
-    it "should return nil if device_id is nil" do
-      Facter::Util::Infiniband.stubs(:get_device_id).with().returns(nil)
-      Facter::Util::Infiniband.get_fw_version().should be_nil
+
+    it "should return a array with single port name" do
+      Facter::Util::Resolution.stubs(:exec).with("ibstat -l").returns("mlx4_0")
+      Facter::Util::Infiniband.get_ports.should == ["mlx4_0"]
     end
-=end
+
+    it "should return a array with two port names" do
+      Facter::Util::Resolution.stubs(:exec).with("ibstat -l").returns("mlx4_0\nmlx4_1")
+      Facter::Util::Infiniband.get_ports.should == ["mlx4_0","mlx4_1"]
+    end
+    
+    it "should return nil if ibstat not found" do
+      Facter::Util::Resolution.stubs(:which).with("ibstat").returns(nil)
+      Facter::Util::Infiniband.get_ports.should be_nil
+    end
+
+    it "should return nil if ibstat -l returns nothing" do
+      Facter::Util::Resolution.stubs(:exec).with("ibstat -l").returns("")
+      Facter::Util::Infiniband.get_ports.should be_nil
+    end
   end
 end

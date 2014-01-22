@@ -47,13 +47,28 @@ class infiniband (
   $rdma_service_name            = $infiniband::params::rdma_service_name,
   $rdma_service_has_status      = $infiniband::params::rdma_service_has_status,
   $rdma_service_has_restart     = $infiniband::params::rdma_service_has_restart,
-  $interfaces                   = $infiniband::params::interfaces
+  $interfaces                   = $infiniband::params::interfaces,
+  $rdma_conf_path               = $infiniband::params::rdma_conf_path,
+  $ipoib_load                   = 'yes',
+  $srp_load                     = 'no',
+  $iser_load                    = 'no',
+  $rds_load                     = 'no',
+  $fixup_mtrr_regs              = 'no',
+  $nfsordma_load                = 'yes',
+  $nfsordma_port                = 2050
 ) inherits infiniband::params {
 
   validate_array($infiniband_support_packages)
   validate_array($optional_infiniband_packages)
   validate_bool($with_optional_packages)
   if $interfaces { validate_hash($interfaces) }
+
+  validate_re($ipoib_load, ['^yes$', '^no$'])
+  validate_re($srp_load, ['^yes$', '^no$'])
+  validate_re($iser_load, ['^yes$', '^no$'])
+  validate_re($rds_load, ['^yes$', '^no$'])
+  validate_re($fixup_mtrr_regs, ['^yes$', '^no$'])
+  validate_re($nfsordma_load, ['^yes$', '^no$'])
 
   ensure_packages($infiniband_support_packages)
 
@@ -73,5 +88,20 @@ class infiniband (
   if $interfaces and !empty($interfaces) {
     create_resources('infiniband::interface', $interfaces)
   }
+
+  Shellvar {
+    ensure  => present,
+    target  => $rdma_conf_path,
+    notify  => Service['rdma'],
+    require => Package['rdma'],
+  }
+
+  shellvar { 'infiniband IPOIB_LOAD': variable => 'IPOIB_LOAD', value => $ipoib_load }
+  shellvar { 'infiniband SRP_LOAD': variable => 'SRP_LOAD', value => $srp_load }
+  shellvar { 'infiniband ISER_LOAD': variable => 'ISER_LOAD', value => $iser_load }
+  shellvar { 'infiniband RDS_LOAD': variable => 'RDS_LOAD', value => $rds_load }
+  shellvar { 'infiniband FIXUP_MTRR_REGS': variable => 'FIXUP_MTRR_REGS', value => $fixup_mtrr_regs }
+  shellvar { 'infiniband NFSoRDMA_LOAD': variable => 'NFSoRDMA_LOAD', value => $nfsordma_load }
+  shellvar { 'infiniband NFSoRDMA_PORT': variable => 'NFSoRDMA_PORT', value => $nfsordma_port }
 
 }
