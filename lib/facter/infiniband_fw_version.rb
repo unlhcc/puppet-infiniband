@@ -16,7 +16,7 @@ Facter.add(:infiniband_fw_version) do
   confine :kernel => "Linux"
   confine :has_infiniband => true
   ports = Facter::Util::Infiniband.get_ports
-  if ports
+  if ! ports.empty?
     fw_version = Facter::Util::Infiniband.get_port_fw_version(ports.first)
     if fw_version
       setcode do

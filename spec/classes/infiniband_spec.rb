@@ -41,6 +41,9 @@ describe 'infiniband' do
     'srptools',
   ]
 
+  it { should create_class('infiniband') }
+  it { should contain_class('infiniband::params') }
+
   packages.each do |package|
     it { should contain_package(package).with({ 'ensure' => 'present' }) }
   end

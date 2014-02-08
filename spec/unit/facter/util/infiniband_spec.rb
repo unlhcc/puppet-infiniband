@@ -32,28 +32,19 @@ describe Facter::Util::Infiniband do
   end
 
   describe 'get_ports' do
-    before :each do
-      Facter::Util::Resolution.stubs(:which).with("ibstat").returns("/usr/sbin/ibstat")
-    end
-
     it "should return a array with single port name" do
-      Facter::Util::Resolution.stubs(:exec).with("ibstat -l").returns("mlx4_0")
+      Dir.stubs(:glob).with("/sys/class/infiniband/*").returns(["/sys/class/infiniband/mlx4_0"])
       Facter::Util::Infiniband.get_ports.should == ["mlx4_0"]
     end
 
     it "should return a array with two port names" do
-      Facter::Util::Resolution.stubs(:exec).with("ibstat -l").returns("mlx4_0\nmlx4_1")
+      Dir.stubs(:glob).with("/sys/class/infiniband/*").returns(["/sys/class/infiniband/mlx4_0","/sys/class/infiniband/mlx4_1"])
       Facter::Util::Infiniband.get_ports.should == ["mlx4_0","mlx4_1"]
     end
-    
-    it "should return nil if ibstat not found" do
-      Facter::Util::Resolution.stubs(:which).with("ibstat").returns(nil)
-      Facter::Util::Infiniband.get_ports.should be_nil
-    end
 
-    it "should return nil if ibstat -l returns nothing" do
-      Facter::Util::Resolution.stubs(:exec).with("ibstat -l").returns("")
-      Facter::Util::Infiniband.get_ports.should be_nil
+    it "should return empty array if no ports exist" do
+      Dir.stubs(:glob).with("/sys/class/infiniband/*").returns([])
+      Facter::Util::Infiniband.get_ports.should == []
     end
   end
 end

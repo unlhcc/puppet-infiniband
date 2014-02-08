@@ -15,13 +15,18 @@ class Facter::Util::Infiniband
     end
   end
 
+  # Reads the contents of file
+  #
+  # @return [String]
+  #
+  # @api private
   def self.read_fw_version(path)
     output = Facter::Util::FileRead.read(path)
     return nil if output.nil?
     output.strip
   end
 
-  # Returns the PCI device ID of the InfiniBand interface card
+  # Returns firmware version of an InfiniBand port
   #
   # @return [String]
   #
@@ -43,21 +48,13 @@ class Facter::Util::Infiniband
     fw_version
   end
 
-  # Returns the firmware version of the InfiniBand interface card
+  # Returns Array of InfiniBand ports
   #
-  # @return [String]
+  # @return [Array]
   #
   # @api private
   def self.get_ports
-    ports = nil
-
-    if Facter::Util::Resolution.which("ibstat")
-      output = Facter::Util::Resolution.exec("ibstat -l")
-      ports = output.split("\n") unless output.nil?
-    end
-
-    return nil if ports.nil? or ports.empty?
-
+    ports = Dir.glob('/sys/class/infiniband/*').collect { |d| File.basename(d) }
     ports
   end
 end

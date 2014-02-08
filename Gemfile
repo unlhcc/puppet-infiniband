@@ -9,8 +9,9 @@ group :development, :test do
   gem 'rspec-system-puppet', '~> 2.0',        :require => false
   gem 'serverspec', '~> 0.11.0',              :require => false
   gem 'rspec-system-serverspec', '~> 1.0.1',  :require => false
-  gem 'rspec-puppet', :git => 'https://github.com/rodjek/rspec-puppet.git', :ref => '8dc9ecbf0508fb8997dec23a2e555ed65af10538'
-  gem 'ci_reporter'
+  gem 'rspec-puppet',                         :require => false,
+    :git => 'https://github.com/rodjek/rspec-puppet.git', :ref => '544b168'
+  gem 'ci_reporter',                          :require => false
 end
 
 if puppetversion = ENV['PUPPET_GEM_VERSION']

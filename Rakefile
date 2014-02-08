@@ -10,7 +10,6 @@ end
 desc "Run puppet-syntax, puppet-lint and rspec-puppet tasks"
 task :ci => [:syntax, :lint, :spec]
 
-PuppetLint.configuration.ignore_paths = ["vendor/**/*.pp", "spec/**/*.pp"]
 PuppetLint.configuration.log_format = "%{path}:%{linenumber}:%{check}:%{KIND}:%{message}"
 
 # Disable puppet-lint checks

@@ -6,7 +6,6 @@ describe 'infiniband_fw_version fact' do
     Facter.clear
     Facter.fact(:kernel).stubs(:value).returns("Linux")
     Facter.fact(:has_infiniband).stubs(:value).returns(true)
-    Facter::Util::Resolution.stubs(:which).with("ibstat").returns("/usr/sbin/ibstat")
   end
   
   it "should handle a single mlx port" do
@@ -39,9 +38,8 @@ describe 'infiniband_fw_version fact' do
     Facter.fact(:infiniband_fw_version).value.should == nil
   end
 
-  it "should return nil if ibstat is not in PATH" do
-    Facter::Util::Resolution.stubs(:which).with("ibstat").returns(nil)
-    Facter::Util::Infiniband.stubs(:get_ports).returns(nil)
+  it "should return nil if no no ports found" do
+    Facter::Util::Infiniband.stubs(:get_ports).returns([])
     Facter.fact(:infiniband_fw_version).value.should == nil
   end
 end

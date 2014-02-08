@@ -19,3 +19,4 @@ shared_context :defaults do
   end
 end
 
+at_exit { RSpec::Puppet::Coverage.report! }
