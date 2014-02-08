@@ -15,12 +15,12 @@ class Facter::Util::Infiniband
     end
   end
 
-  # Reads the contents of file
+  # Reads the contents of path in sysfs
   #
   # @return [String]
   #
   # @api private
-  def self.read_fw_version(path)
+  def self.read_sysfs(path)
     output = Facter::Util::FileRead.read(path)
     return nil if output.nil?
     output.strip
@@ -32,20 +32,31 @@ class Facter::Util::Infiniband
   #
   # @api private
   def self.get_port_fw_version(port)
-    port_sysfs_path = "/sys/class/infiniband/#{port}"
+    sysfs_base_path = File.join("/sys/class/infiniband/", port)
     fw_version = nil
 
     case port
     when /^mlx/
-      sysfs_fw_file = File.join(port_sysfs_path, "fw_ver")
+      sysfs_fw_file = File.join(sysfs_base_path, "fw_ver")
     when /^qib/
-      sysfs_fw_file = File.join(port_sysfs_path, "version")
+      sysfs_fw_file = File.join(sysfs_base_path, "version")
     else
       return nil
     end
 
-    fw_version = self.read_fw_version(sysfs_fw_file)
+    fw_version = self.read_sysfs(sysfs_fw_file)
     fw_version
+  end
+
+  # Returns board_id of an InfiniBand port
+  #
+  # @return [String]
+  #
+  # @api private
+  def self.get_port_board_id(port)
+    sysfs_path = File.join("/sys/class/infiniband", port, "board_id")
+    board_id = self.read_sysfs(sysfs_path)
+    board_id
   end
 
   # Returns Array of InfiniBand ports

@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'facter/util/file_read'
 require 'facter/util/infiniband'
 
 describe Facter::Util::Infiniband do
@@ -24,10 +25,44 @@ describe Facter::Util::Infiniband do
     end
   end
 
+  describe 'read_sysfs' do
+    it 'should return output' do
+      Facter::Util::FileRead.expects(:read).with("/sys/class/infiniband/mlx4_0/fw_ver").returns("2.9.1200\n")
+      Facter::Util::Infiniband.read_sysfs("/sys/class/infiniband/mlx4_0/fw_ver").should == "2.9.1200"
+    end
+
+    it 'should return nil' do
+      Facter::Util::FileRead.expects(:read).with("/sys/class/infiniband/mlx4_0/fw_ver").returns(nil)
+      Facter::Util::Infiniband.read_sysfs("/sys/class/infiniband/mlx4_0/fw_ver").should == nil
+    end
+  end
+
   describe 'get_port_fw_version' do
     it 'should return fw_ver for mlx devices' do
-      Facter::Util::Infiniband.expects(:read_fw_version).with("/sys/class/infiniband/mlx4_0/fw_ver").returns("2.9.1200")
+      Facter::Util::Infiniband.expects(:read_sysfs).with("/sys/class/infiniband/mlx4_0/fw_ver").returns("2.9.1200")
       Facter::Util::Infiniband.get_port_fw_version("mlx4_0").should == "2.9.1200"
+    end
+
+    it 'should return nil' do
+      Facter::Util::Infiniband.expects(:read_sysfs).with("/sys/class/infiniband/mlx4_0/fw_ver").returns(nil)
+      Facter::Util::Infiniband.get_port_fw_version("mlx4_0").should == nil
+    end
+
+    it 'should return nil' do
+      Facter::Util::Infiniband.expects(:read_sysfs).never
+      Facter::Util::Infiniband.get_port_fw_version("foo").should == nil
+    end
+  end
+
+  describe 'get_port_board_id' do
+    it 'should return board_id' do
+      Facter::Util::Infiniband.expects(:read_sysfs).with("/sys/class/infiniband/mlx4_0/board_id").returns("MT_0000000000")
+      Facter::Util::Infiniband.get_port_board_id("mlx4_0").should == "MT_0000000000"
+    end
+
+    it 'should return nil' do
+      Facter::Util::Infiniband.expects(:read_sysfs).with("/sys/class/infiniband/mlx4_0/fw_ver").returns(nil)
+      Facter::Util::Infiniband.get_port_fw_version("mlx4_0").should == nil
     end
   end
 
