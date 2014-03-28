@@ -1,11 +1,13 @@
-# puppet-infiniband [![Build Status](https://travis-ci.org/treydock/puppet-infiniband.png)](https://travis-ci.org/treydock/puppet-infiniband)
+# puppet-infiniband
+
+[![Build Status](https://travis-ci.org/treydock/puppet-infiniband.png)](https://travis-ci.org/treydock/puppet-infiniband)
 
 Installs the InfiniBand software stack.
 
 ## Support
 
-* CentOS 6.4 x86_64
-* Scientific Linux 6.4 x86_64
+* CentOS 6 x86_64
+* Scientific Linux 6 x86_64
 
 ## Usage
 
@@ -158,20 +160,24 @@ Returns the board_id (PSID) of the InfiniBand interface card.
 
 ## Development
 
-### Dependencies
+### Testing
 
-* Ruby 1.8.7
-* Bundler
+Testing requires the following dependencies:
 
-### Unit testing
+* rake
+* bundler
 
-1. Install gem dependencies
+Install gem dependencies
 
         bundle install
 
-2. Run tests
+Run unit tests
 
-        bundle exec rake ci
+        bundle exec rake test
+
+If you have Vagrant >= 1.2.0 installed you can run system tests
+
+    bundle exec rake acceptance
 
 ## TODO
 
