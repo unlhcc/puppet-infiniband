@@ -35,7 +35,6 @@ describe 'infiniband' do
     'infiniband-diags',
     'libibcommon',
     'mstflint',
-    'opensm',
     'perftest',
     'qperf',
     'srptools',
@@ -44,12 +43,14 @@ describe 'infiniband' do
   it { should create_class('infiniband') }
   it { should contain_class('infiniband::params') }
 
+  it { should have_package_resource_count(18) }
+
   packages.each do |package|
     it { should contain_package(package).with({ 'ensure' => 'present' }) }
   end
 
   optional_packages.each do |optional_package|
-    it { should contain_package(optional_package).with({ 'ensure' => 'present' }) }
+    it { should_not contain_package(optional_package) }
   end
 
   it do
@@ -151,11 +152,26 @@ describe 'infiniband' do
     end
   end
 
-  context 'with_optional_packages => false' do
-    let(:params) {{ :with_optional_packages => false }}
-    
+  context 'with_optional_packages => true' do
+    let(:params) {{ :with_optional_packages => true }}
+
+    it { should have_package_resource_count(25) }
+
     optional_packages.each do |optional_package|
-      it { should_not contain_package(optional_package) }
+      it { should contain_package(optional_package).with_ensure('present') }
+    end
+
+    context "when with_optional_packages => true and packages => ['foo']" do
+      let(:params) {{ :with_optional_packages => true, :packages => ['foo'] }}
+
+      it { should have_package_resource_count(1) }
+
+      it { should contain_package('foo').with_ensure('present') }
+
+      optional_packages.each do |optional_package|
+        it { should_not contain_package(optional_package) }
+      end
+
     end
   end
 
@@ -205,6 +221,18 @@ describe 'infiniband' do
     context "when #{p} => 'foo'" do
       let(:params) {{ p.to_sym => 'foo' }}
       it { expect { should create_class('infiniband') }.to raise_error(Puppet::Error, /does not match \["\^yes\$", "\^no\$"\]/) }
+    end
+  end
+
+  [
+    'packages',
+    'mandatory_packages',
+    'default_packages',
+    'optional_packages',
+  ].each do |p|
+    context "when #{p} => 'foo'" do
+      let(:params) {{ p.to_sym => 'foo' }}
+      it { expect { should create_class('infiniband') }.to raise_error(Puppet::Error, /is not an Array/) }
     end
   end
 end

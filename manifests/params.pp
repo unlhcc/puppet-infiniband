@@ -1,26 +1,18 @@
-# Class: infiniband::params
-#
-#   The infiniband configuration settings.
-#
-# === Authors
-#
-# Trey Dockendorf <treydock@gmail.com>
-#
-# === Copyright
-#
-# Copyright 2013 Trey Dockendorf
-#
+# The infiniband default configuration settings.
 class infiniband::params {
 
   case $::osfamily {
     'RedHat': {
-      $infiniband_support_packages    = [
+      $infiniband_support_mandatory_packages = [
         'libibcm',
         'libibverbs',
         'libibverbs-utils',
         'librdmacm',
         'librdmacm-utils',
         'rdma',
+      ]
+
+      $infiniband_support_default_packages = [
         'dapl',
         'ibacm',
         'ibsim',
@@ -34,21 +26,21 @@ class infiniband::params {
         'libnes',
         'rds-tools',
       ]
-      $optional_infiniband_packages   = [
+
+      $infiniband_support_optional_packages = [
         'compat-dapl',
         'infiniband-diags',
         'libibcommon',
         'mstflint',
-        'opensm',
         'perftest',
         'qperf',
         'srptools',
       ]
-      $with_optional_packages         = true
-      $rdma_service_name              = 'rdma'
-      $rdma_service_has_status        = true
-      $rdma_service_has_restart       = true
-      $rdma_conf_path                 = '/etc/rdma/rdma.conf'
+
+      $rdma_service_name = 'rdma'
+      $rdma_service_has_status = true
+      $rdma_service_has_restart = true
+      $rdma_conf_path = '/etc/rdma/rdma.conf'
     }
 
     default: {

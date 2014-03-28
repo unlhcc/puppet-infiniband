@@ -1,47 +1,12 @@
 # == Class: infiniband
 #
-# Manage the necessary packages and services to support Infiniband.
-#
-# === Parameters
-#
-# Document parameters here.
-#
-# [*infiniband_support_packages*]
-#   Array of package names to install the infiniband support.
-#
-# [*optional_infiniband_packages*]
-#   Array of package names to install the optional infiniband support.
-#
-# [*with_optional_packages*]
-#   Boolean that determines if the optional packages will be installed.
-#
-# [*rdma_service_name*]
-#   Service name for RDMA.
-#
-# [*rdma_service_has_status*]
-#   Boolean to set if RDMA service has status option.
-#
-# [*rdma_service_has_restart*]
-#   Boolean to set if RDMA service has restart option.
-#
-# === Examples
-#
-#  class { infiniband:
-#    with_optional_packages => true
-#  }
-#
-# === Authors
-#
-# Trey Dockendorf <treydock@gmail.com>
-#
-# === Copyright
-#
-# Copyright 2013 Trey Dockendorf
-#
+# See README.md for more details.
 class infiniband (
-  $infiniband_support_packages  = $infiniband::params::infiniband_support_packages,
-  $optional_infiniband_packages = $infiniband::params::optional_infiniband_packages,
-  $with_optional_packages       = $infiniband::params::with_optional_packages,
+  $packages                     = 'UNSET',
+  $mandatory_packages           = $infiniband::params::infiniband_support_mandatory_packages,
+  $default_packages             = $infiniband::params::infiniband_support_default_packages,
+  $optional_packages            = $infiniband::params::infiniband_support_optional_packages,
+  $with_optional_packages       = false,
   $rdma_service_ensure          = $infiniband::params::rdma_service_ensure,
   $rdma_service_enable          = $infiniband::params::rdma_service_enable,
   $rdma_service_name            = $infiniband::params::rdma_service_name,
@@ -58,11 +23,7 @@ class infiniband (
   $nfsordma_port                = 2050
 ) inherits infiniband::params {
 
-  validate_array($infiniband_support_packages)
-  validate_array($optional_infiniband_packages)
-  validate_bool($with_optional_packages)
   if $interfaces { validate_hash($interfaces) }
-
   validate_re($ipoib_load, ['^yes$', '^no$'])
   validate_re($srp_load, ['^yes$', '^no$'])
   validate_re($iser_load, ['^yes$', '^no$'])
@@ -70,11 +31,23 @@ class infiniband (
   validate_re($fixup_mtrr_regs, ['^yes$', '^no$'])
   validate_re($nfsordma_load, ['^yes$', '^no$'])
 
-  ensure_packages($infiniband_support_packages)
+  if $packages != 'UNSET' {
+    validate_array($packages)
 
-  if $with_optional_packages {
-    ensure_packages($optional_infiniband_packages)
+    $infiniband_support_packages = $packages
+  } else {
+    validate_array($mandatory_packages)
+    validate_array($default_packages)
+    validate_array($optional_packages)
+    validate_bool($with_optional_packages)
+
+    $infiniband_support_packages = $with_optional_packages ? {
+      true  => flatten([$mandatory_packages, $default_packages, $optional_packages]),
+      false => flatten([$mandatory_packages, $default_packages]),
+    }
   }
+
+  ensure_packages($infiniband_support_packages)
 
   service { 'rdma':
     ensure      => $rdma_service_ensure,

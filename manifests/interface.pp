@@ -1,19 +1,6 @@
 # == Define: infiniband::interface
 #
-# Configures an InfiniBand interface
-#
-# === Parameters
-#
-# === Examples
-#
-# === Authors
-#
-# Trey Dockendorf <treydock@gmail.com>
-#
-# === Copyright
-#
-# Copyright 2013 Trey Dockendorf
-#
+# See README.md for more details.
 define infiniband::interface(
   $ipaddr,
   $netmask,
