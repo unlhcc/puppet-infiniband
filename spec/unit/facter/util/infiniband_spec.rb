@@ -7,23 +7,6 @@ describe Facter::Util::Infiniband do
   before :each do
     Facter.clear
   end
-  
-  describe 'count_ib_devices' do
-    it "should return 1 with Mellanox card" do
-      Facter::Util::Resolution.stubs(:exec).with("lspci -nn").returns(my_fixture_read('mellanox_lspci_1'))
-      Facter::Util::Infiniband.count_ib_devices == 1
-    end
-
-    it "should return 1 with QLogic card" do
-      Facter::Util::Resolution.stubs(:exec).with("lspci -nn").returns(my_fixture_read('qlogic_lspci_1'))
-      Facter::Util::Infiniband.count_ib_devices == 1
-    end
-
-    it "should return 0 without InfiniBand" do
-      Facter::Util::Resolution.stubs(:exec).with("lspci -nn").returns(my_fixture_read('noib_lspci_1'))
-      Facter::Util::Infiniband.count_ib_devices == 0
-    end
-  end
 
   describe 'read_sysfs' do
     it 'should return output' do

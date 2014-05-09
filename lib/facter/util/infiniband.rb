@@ -1,5 +1,12 @@
 class Facter::Util::Infiniband
-  LSPCI_IB_REGEX = /^(.*)\sInfiniBand \[0c06\].*$/
+  # REF: http://cateee.net/lkddb/web-lkddb/INFINIBAND.html
+  LSPCI_IB_REGEX = /\s(1077|15b3|1678|1867|18b8|1fc1):/
+
+  # lspci is a delegating helper method intended to make it easier to stub the
+  # system call without affecting other calls to Facter::Core::Execution.exec
+  def self.lspci(command = "lspci -n 2>/dev/null")
+    Facter::Core::Execution.exec command
+  end
 
   # Returns the number of InfiniBand interfaces found
   # in lspci output
@@ -9,8 +16,8 @@ class Facter::Util::Infiniband
   # @api private
   def self.count_ib_devices
     if Facter::Util::Resolution.which('lspci')
-      lspci = Facter::Util::Resolution.exec('lspci -nn')
-      matches = lspci.scan(LSPCI_IB_REGEX)
+      output = self.lspci
+      matches = output.scan(LSPCI_IB_REGEX)
       matches.flatten.reject {|s| s.nil?}.length
     end
   end

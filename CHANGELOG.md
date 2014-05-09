@@ -4,6 +4,13 @@ Release notes for the treydock-infiniband module.
 
 ------------------------------------------
 
+#### 2014-05-09 Release 0.0.3
+
+This release contains bug fixes to the 'has_infiniband' fact
+and the associated unit tests.
+
+------------------------------------------
+
 #### 2014-05-09 Release 0.0.2
 
 This releaes contains only minor bug fixes.
