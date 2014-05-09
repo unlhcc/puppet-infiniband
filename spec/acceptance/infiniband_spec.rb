@@ -49,6 +49,11 @@ describe 'infiniband class' do
         it { should_not be_installed }
       end
     end
+
+    describe service('rdma') do
+      it { should_not be_enabled }
+      it { should_not be_running }
+    end
   end
 
   context 'when with_optional_packages => true' do
@@ -98,6 +103,11 @@ describe 'infiniband class' do
       describe package(pkg) do
         it { should be_installed }
       end
+    end
+
+    describe service('rdma') do
+      it { should_not be_enabled }
+      it { should_not be_running }
     end
   end
 end

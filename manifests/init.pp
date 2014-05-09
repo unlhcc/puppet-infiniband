@@ -47,6 +47,12 @@ class infiniband (
     }
   }
 
+  if ! $rdma_service_ensure or $rdma_service_ensure == 'stopped' {
+    $shellvar_notify = undef
+  } else {
+    $shellvar_notify = Service['rdma']
+  }
+
   ensure_packages($infiniband_support_packages)
 
   service { 'rdma':
@@ -65,7 +71,7 @@ class infiniband (
   Shellvar {
     ensure  => present,
     target  => $rdma_conf_path,
-    notify  => Service['rdma'],
+    notify  => $shellvar_notify,
     require => Package['rdma'],
   }
 

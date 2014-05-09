@@ -1,15 +1,19 @@
 require 'spec_helper'
 
-describe 'infiniband' do
-  include_context :defaults
+def shellvars
+  {
+    'IPOIB_LOAD'      => { 'value' => 'yes' },
+    'SRP_LOAD'        => { 'value' => 'no' },
+    'ISER_LOAD'       => { 'value' => 'no' },
+    'RDS_LOAD'        => { 'value' => 'no' },
+    'FIXUP_MTRR_REGS' => { 'value' => 'no' },
+    'NFSoRDMA_LOAD'   => { 'value' => 'yes' },
+    'NFSoRDMA_PORT'   => { 'value' => '2050' },
+  }
+end
 
-  let(:facts) { default_facts }
-
-  let :interfaces_example do
-    { 'ib0' => {'ipaddr' => '192.168.1.1', 'netmask'  => '255.255.255.0'} }
-  end
-
-  packages = [
+def packages
+  [
     'libibcm',
     'libibverbs',
     'libibverbs-utils',
@@ -29,8 +33,10 @@ describe 'infiniband' do
     'libnes',
     'rds-tools',
   ]
+end
 
-  optional_packages = [
+def optional_packages
+  [
     'compat-dapl',
     'infiniband-diags',
     'libibcommon',
@@ -39,6 +45,16 @@ describe 'infiniband' do
     'qperf',
     'srptools',
   ]
+end
+
+describe 'infiniband' do
+  include_context :defaults
+
+  let(:facts) { default_facts }
+
+  let :interfaces_example do
+    { 'ib0' => {'ipaddr' => '192.168.1.1', 'netmask'  => '255.255.255.0'} }
+  end
 
   it { should create_class('infiniband') }
   it { should contain_class('infiniband::params') }
@@ -64,83 +80,21 @@ describe 'infiniband' do
     })
   end
 
-  it do
-    should contain_shellvar('infiniband IPOIB_LOAD').with({
-      'ensure'    => 'present',
-      'target'    => '/etc/rdma/rdma.conf',
-      'notify'    => 'Service[rdma]',
-      'require'   => 'Package[rdma]',
-      'variable'  => 'IPOIB_LOAD',
-      'value'     => 'yes',
-    })
+  it { should have_shellvar_resource_count(7) }
+
+  shellvars.each_pair do |name,params|
+    it do
+      should contain_shellvar("infiniband #{name}").with({
+        'ensure'  => 'present',
+        'target'    => '/etc/rdma/rdma.conf',
+        'notify'    => 'Service[rdma]',
+        'require'   => 'Package[rdma]',
+        'variable'  => name,
+        'value'     => params['value'],
+      })
+    end
   end
 
-  it do
-    should contain_shellvar('infiniband SRP_LOAD').with({
-      'ensure'    => 'present',
-      'target'    => '/etc/rdma/rdma.conf',
-      'notify'    => 'Service[rdma]',
-      'require'   => 'Package[rdma]',
-      'variable'  => 'SRP_LOAD',
-      'value'     => 'no',
-    })
-  end
-
-  it do
-    should contain_shellvar('infiniband ISER_LOAD').with({
-      'ensure'    => 'present',
-      'target'    => '/etc/rdma/rdma.conf',
-      'notify'    => 'Service[rdma]',
-      'require'   => 'Package[rdma]',
-      'variable'  => 'ISER_LOAD',
-      'value'     => 'no',
-    })
-  end
-
-  it do
-    should contain_shellvar('infiniband RDS_LOAD').with({
-      'ensure'    => 'present',
-      'target'    => '/etc/rdma/rdma.conf',
-      'notify'    => 'Service[rdma]',
-      'require'   => 'Package[rdma]',
-      'variable'  => 'RDS_LOAD',
-      'value'     => 'no',
-    })
-  end
-
-  it do
-    should contain_shellvar('infiniband FIXUP_MTRR_REGS').with({
-      'ensure'    => 'present',
-      'target'    => '/etc/rdma/rdma.conf',
-      'notify'    => 'Service[rdma]',
-      'require'   => 'Package[rdma]',
-      'variable'  => 'FIXUP_MTRR_REGS',
-      'value'     => 'no',
-    })
-  end
-
-  it do
-    should contain_shellvar('infiniband NFSoRDMA_LOAD').with({
-      'ensure'    => 'present',
-      'target'    => '/etc/rdma/rdma.conf',
-      'notify'    => 'Service[rdma]',
-      'require'   => 'Package[rdma]',
-      'variable'  => 'NFSoRDMA_LOAD',
-      'value'     => 'yes',
-    })
-  end
-
-  it do
-    should contain_shellvar('infiniband NFSoRDMA_PORT').with({
-      'ensure'    => 'present',
-      'target'    => '/etc/rdma/rdma.conf',
-      'notify'    => 'Service[rdma]',
-      'require'   => 'Package[rdma]',
-      'variable'  => 'NFSoRDMA_PORT',
-      'value'     => '2050',
-    })
-  end
-  
   context "has_infiniband is false" do
     let(:facts) { default_facts.merge({:has_infiniband => false }) }
 
@@ -149,6 +103,10 @@ describe 'infiniband' do
         'ensure'      => 'stopped',
         'enable'      => 'false',
       })
+    end
+
+    shellvars.keys.each do |name|
+      it { should contain_shellvar("infiniband #{name}").without_notify }
     end
   end
 
