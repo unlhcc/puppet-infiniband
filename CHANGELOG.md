@@ -4,6 +4,14 @@ Release notes for the treydock-infiniband module.
 
 ------------------------------------------
 
+#### 2014-05-09 Release 0.0.4
+
+This release contains a bug fix breaking the infiniband facts for Facter less than 2.0.
+
+Added facter version test matrix to travis-ci tests.
+
+------------------------------------------
+
 #### 2014-05-09 Release 0.0.3
 
 This release contains bug fixes to the 'has_infiniband' fact

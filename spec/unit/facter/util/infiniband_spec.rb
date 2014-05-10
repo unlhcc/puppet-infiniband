@@ -8,6 +8,13 @@ describe Facter::Util::Infiniband do
     Facter.clear
   end
 
+  describe 'lspci' do
+    it 'should return output' do
+      Facter::Util::Resolution.expects(:exec).with('lspci -n 2>/dev/null').returns("foo")
+      Facter::Util::Infiniband.lspci.should == "foo"
+    end
+  end
+
   describe 'read_sysfs' do
     it 'should return output' do
       Facter::Util::FileRead.expects(:read).with("/sys/class/infiniband/mlx4_0/fw_ver").returns("2.9.1200\n")

@@ -5,7 +5,10 @@ class Facter::Util::Infiniband
   # lspci is a delegating helper method intended to make it easier to stub the
   # system call without affecting other calls to Facter::Core::Execution.exec
   def self.lspci(command = "lspci -n 2>/dev/null")
-    Facter::Core::Execution.exec command
+    #TODO: Deprecated in facter-2.0
+    Facter::Util::Resolution.exec command
+    #TODO: Not supported in facter < 2.0
+    #Facter::Core::Execution.exec command
   end
 
   # Returns the number of InfiniBand interfaces found
