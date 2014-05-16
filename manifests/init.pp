@@ -20,7 +20,10 @@ class infiniband (
   $rds_load                     = 'no',
   $fixup_mtrr_regs              = 'no',
   $nfsordma_load                = 'yes',
-  $nfsordma_port                = 2050
+  $nfsordma_port                = 2050,
+  $manage_mlx4_core_options     = false,
+  $log_num_mtt                  = 'UNSET',
+  $log_mtts_per_seg             = '3',
 ) inherits infiniband::params {
 
   if $interfaces { validate_hash($interfaces) }
@@ -30,6 +33,7 @@ class infiniband (
   validate_re($rds_load, ['^yes$', '^no$'])
   validate_re($fixup_mtrr_regs, ['^yes$', '^no$'])
   validate_re($nfsordma_load, ['^yes$', '^no$'])
+  validate_bool($manage_mlx4_core_options)
 
   if $packages != 'UNSET' {
     validate_array($packages)
@@ -48,9 +52,16 @@ class infiniband (
   }
 
   if ! $rdma_service_ensure or $rdma_service_ensure == 'stopped' {
-    $shellvar_notify = undef
+    $shellvar_notify    = undef
+    $modprobe_d_notify  = undef
   } else {
-    $shellvar_notify = Service['rdma']
+    $shellvar_notify    = Service['rdma']
+    $modprobe_d_notify  = Service['rdma']
+  }
+
+  $_log_num_mtt = $log_num_mtt ? {
+    'UNSET' => calc_log_num_mtt($::memorysize_mb, $log_mtts_per_seg),
+    default => $log_num_mtt,
   }
 
   ensure_packages($infiniband_support_packages)
@@ -83,4 +94,14 @@ class infiniband (
   shellvar { 'infiniband NFSoRDMA_LOAD': variable => 'NFSoRDMA_LOAD', value => $nfsordma_load }
   shellvar { 'infiniband NFSoRDMA_PORT': variable => 'NFSoRDMA_PORT', value => $nfsordma_port }
 
+  if $manage_mlx4_core_options {
+    file { '/etc/modprobe.d/mlx4_core.conf':
+      ensure  => 'file',
+      content => template('infiniband/modprobe.d/mlx4_core.conf.erb'),
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      notify  => $modprobe_d_notify,
+    }
+  }
 }

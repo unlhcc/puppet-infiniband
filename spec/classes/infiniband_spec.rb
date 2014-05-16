@@ -95,6 +95,8 @@ describe 'infiniband' do
     end
   end
 
+  it { should_not contain_file('/etc/modprobe.d/mlx4_core.conf') }
+
   context "has_infiniband is false" do
     let(:facts) { default_facts.merge({:has_infiniband => false }) }
 
@@ -166,6 +168,64 @@ describe 'infiniband' do
      it 'should raise error' do
        expect raise_error(Puppet::Error, /false is not a Hash/)
      end
+  end
+
+  context "when manage_mlx4_core_options => true" do
+    let(:params) {{ :manage_mlx4_core_options => true }}
+
+    it do
+      should contain_file('/etc/modprobe.d/mlx4_core.conf').with({
+        'ensure'  => 'file',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'notify'  => 'Service[rdma]',
+      })
+    end
+
+    it do
+      verify_contents(catalogue, '/etc/modprobe.d/mlx4_core.conf', [
+        'options mlx4_core log_num_mtt=22 log_mtts_per_seg=3',
+      ])
+    end
+
+    context 'when log_num_mtt => 26' do
+      let(:params) {{ :manage_mlx4_core_options => true, :log_num_mtt => '26' }}
+
+      it do
+        verify_contents(catalogue, '/etc/modprobe.d/mlx4_core.conf', [
+          'options mlx4_core log_num_mtt=26 log_mtts_per_seg=3',
+        ])
+      end
+    end
+
+    context 'when log_mtts_per_seg => 1' do
+      let(:params) {{ :manage_mlx4_core_options => true, :log_mtts_per_seg => '1' }}
+
+      it do
+        verify_contents(catalogue, '/etc/modprobe.d/mlx4_core.conf', [
+          'options mlx4_core log_num_mtt=24 log_mtts_per_seg=1',
+        ])
+      end
+    end
+
+    context 'when has_infiniband => false' do
+      let(:facts) { default_facts.merge({:has_infiniband => false }) }
+      let(:params) {{ :manage_mlx4_core_options => true }}
+
+      it { should contain_file('/etc/modprobe.d/mlx4_core.conf').without_notify }
+    end
+  end
+
+  # Test validate_bool parameters
+  [
+    'with_optional_packages',
+    'manage_mlx4_core_options',
+  ].each do |param|
+    context "with #{param} => 'foo'" do
+      let(:params) {{ param => 'foo' }}
+      it { expect { should create_class('infiniband') }.to raise_error(Puppet::Error, /is not a boolean/) }
+    end
   end
 
   [
