@@ -53,10 +53,8 @@ class infiniband (
 
   if ! $rdma_service_ensure or $rdma_service_ensure == 'stopped' {
     $shellvar_notify    = undef
-    $modprobe_d_notify  = undef
   } else {
     $shellvar_notify    = Service['rdma']
-    $modprobe_d_notify  = Service['rdma']
   }
 
   $_log_num_mtt = $log_num_mtt ? {
@@ -101,7 +99,7 @@ class infiniband (
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      notify  => $modprobe_d_notify,
+      before  => Service['rdma'],
     }
   }
 }

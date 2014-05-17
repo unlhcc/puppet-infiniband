@@ -179,7 +179,7 @@ describe 'infiniband' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'notify'  => 'Service[rdma]',
+        'before'  => 'Service[rdma]',
       })
     end
 
@@ -207,13 +207,6 @@ describe 'infiniband' do
           'options mlx4_core log_num_mtt=24 log_mtts_per_seg=1',
         ])
       end
-    end
-
-    context 'when has_infiniband => false' do
-      let(:facts) { default_facts.merge({:has_infiniband => false }) }
-      let(:params) {{ :manage_mlx4_core_options => true }}
-
-      it { should contain_file('/etc/modprobe.d/mlx4_core.conf').without_notify }
     end
   end
 
