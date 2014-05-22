@@ -156,6 +156,10 @@ String: required, no default.  The IPADDR for the infiniband interface.
 
 String: required, no default.  The NETMASK for the infiniband interface.
 
+#####`gateway`
+
+String: defaults to 'UNSET'.  The GATEWAY for the infiniband interface.
+
 #####`ensure`
 
 String: defaults to 'present'.  Sets if the infiniband::interface should be present or absent.
