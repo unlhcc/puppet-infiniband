@@ -4,6 +4,7 @@
 define infiniband::interface(
   $ipaddr,
   $netmask,
+  $gateway        = 'UNSET',
   $ensure         = 'present',
   $enable         = true,
   $connected_mode = 'yes'

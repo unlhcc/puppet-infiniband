@@ -11,7 +11,7 @@ Installs the InfiniBand software stack.
 
 ## Usage
 
-### Class: `infiniband`
+### infiniband
 
 Standard usage to enable InfiniBand support
 
@@ -25,7 +25,21 @@ Define a IBoIP interface
       }
     }
 
-#### Parameters for `infiniband` class
+## Reference
+
+### Classes
+
+#### Public classes
+
+* `infiniband`: Installs and configures a system to use Infiniband
+
+#### Private lasses
+
+* `infiniband::params`: Sets default values based on the `osfamily` and `has_infiniband` facts.
+
+### Parameters
+
+#### infiniband
 
 #####`packages`
 
@@ -105,7 +119,23 @@ Sets the `NFSoRDMA_LOAD` setting for the RDMA service (defaults to 'yes').
 
 Sets the `NFSoRDMA_PORT` setting for the RDMA service (defaults to '2050').
 
-### Defined type: `infiniband::interface`
+#####`manage_mlx4_core_options`
+
+Boolean that determines if '/etc/modprobe.d/mlx4_core.conf' should be managed (defaults to false).
+
+#####`log_num_mtt`
+
+Sets the mlx4_core module's 'log_num_mtt' value.  Defaults to 'UNSET'.
+
+When the value is 'UNSET' the value is determined using the `calc_log_num_mtt` parser function.
+
+#####`log_mtts_per_seg`
+
+Sets the mlx4_core module's 'log_mtts_per_seq' value.  Defaults to '3'.
+
+### Defines
+
+#### infiniband::interface
 
 Creates the ifcfg file for an IBoIP interface
 
@@ -113,8 +143,6 @@ Creates the ifcfg file for an IBoIP interface
       ipaddr  => '192.168.1.1',
       netmask => '255.255.255.0',
     }
-
-#### Parameters for `infiniband::interface` defined type
 
 #####`name`
 
@@ -140,23 +168,54 @@ Boolean: defaults to true.  Sets if the infiniband::interface should be enabled.
 
 String: defaults to 'yes'.  The CONNECTED_MODE for the infiniband interface.
 
-## Facts
+### Facts
 
-### `has_infiniband`
+#### has_infiniband
 
 Determine if the system's hardware supports InfiniBand.
 
-### `infiniband_fw_version`
+#### infiniband_fw_version
 
 Reports the firmware version of the InfiniBand interface card.
 
 **NOTE:** Only supports getting the value from the first interface card found.
 
-### `infiniband_board_id`
+#### infiniband_board_id
 
 Returns the board_id (PSID) of the InfiniBand interface card.
 
 **NOTE:** Only supports getting the value from the first interface card found.
+
+### Functions
+
+#### calc_log_num_mtt
+
+This function calculates the appropriate value for mlx4_core module's 'log_num_mtt' parameter.
+
+This function assumes the maximum registerable memory is twice the system's RAM size.
+
+The formula is `max_reg_mem = (2^log_num_mtt) * (2^log_mtts_per_seg) * (page_size_bytes)`.  This function finds the
+ log_num_mtt necessary to make 'max_reg_mem' twice the size of system's RAM.  Ref: http://community.mellanox.com/docs/DOC-1120.
+
+*Usage*:
+
+calc_log_num_mtt(`memorysize_mb`, `log_mtts_per_seg`, `page_size_bytes`)
+
+* memorysize_mb - The system's memory size in MBs.  This argument is required.
+* log_mtts_per_seg - The value for log_mtts_per_seg.  Defaults to '3' if undefined.
+* page_size_bytes - The system's page size in bytes.  Defaults to '4096' if undefined.
+
+*Examples*:
+
+If `$::memorysize_mb` is 129035.57
+
+    calc_log_num_mtt($::memorysize_mb, 3)
+
+Would return 23
+
+    calc_log_num_mtt($::memorysize_mb, 1)
+
+Would return 25
 
 ## Development
 
@@ -169,11 +228,11 @@ Testing requires the following dependencies:
 
 Install gem dependencies
 
-        bundle install
+    bundle install
 
 Run unit tests
 
-        bundle exec rake test
+    bundle exec rake test
 
 If you have Vagrant >= 1.2.0 installed you can run system tests
 
@@ -182,3 +241,4 @@ If you have Vagrant >= 1.2.0 installed you can run system tests
 ## TODO
 
 * Additional facts for IB firmware version, card model, etc.
+* Use the anchor pattern and seperate the install, config and service resources into seperate classes

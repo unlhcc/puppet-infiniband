@@ -36,7 +36,7 @@ describe 'infiniband::interface' do
     let :params do
       default_params.merge({:ensure => 'absent'})
     end
-    
+
     it { should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with_ensure('absent') }
   end
 
@@ -44,7 +44,7 @@ describe 'infiniband::interface' do
     let :params do
       default_params.merge({:enable => 'no'})
     end
-    
+
     it { should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with_content(my_fixture_read('ifcfg-ib0_with_onboot_no')) }
   end
 
@@ -52,8 +52,16 @@ describe 'infiniband::interface' do
     let :params do
       default_params.merge({:connected_mode => 'no'})
     end
-    
+
     it { should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with_content(my_fixture_read('ifcfg-ib0_without_connected_mode')) }
+  end
+
+  context 'gateway => 192.168.1.254' do
+    let :params do
+      default_params.merge({:gateway => '192.168.1.254'})
+    end
+
+    it { should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with_content(my_fixture_read('ifcfg-ib0_with_gateway')) }
   end
 end
 
