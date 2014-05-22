@@ -1,5 +1,5 @@
 name    'treydock-infiniband'
-version '0.0.4'
+version '0.1.0'
 source 'git://github.com/treydock/puppet-infiniband.git'
 author 'treydock'
 license 'Apache License, Version 2.0'

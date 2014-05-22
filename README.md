@@ -196,8 +196,6 @@ Returns the board_id (PSID) of the InfiniBand interface card.
 
 This function calculates the appropriate value for mlx4_core module's 'log_num_mtt' parameter.
 
-This function assumes the maximum registerable memory is twice the system's RAM size.
-
 The formula is `max_reg_mem = (2^log_num_mtt) * (2^log_mtts_per_seg) * (page_size_bytes)`.  This function finds the
  log_num_mtt necessary to make 'max_reg_mem' twice the size of system's RAM.  Ref: http://community.mellanox.com/docs/DOC-1120.
 
@@ -245,4 +243,5 @@ If you have Vagrant >= 1.2.0 installed you can run system tests
 ## TODO
 
 * Additional facts for IB firmware version, card model, etc.
-* Use the anchor pattern and seperate the install, config and service resources into seperate classes
+* Manage the ibacm service
+* Use the anchor pattern and separate the install, config and service resources into separate classes
