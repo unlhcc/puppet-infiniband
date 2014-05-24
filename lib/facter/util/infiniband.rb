@@ -89,9 +89,6 @@ class Facter::Util::Infiniband
     return nil if port_sysfs_path.nil?
 
     rate_sysfs_path = File.join(port_sysfs_path, 'rate')
-
-    return nil unless File.exist?(rate_sysfs_path)
-
     rate = self.read_sysfs(rate_sysfs_path)
     rate
   end

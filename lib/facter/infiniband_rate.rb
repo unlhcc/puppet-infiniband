@@ -19,7 +19,7 @@ Facter.add(:infiniband_rate) do
     rate = Facter::Util::Infiniband.get_port_rate(ports.first)
     if rate
       setcode do
-        rate
+        rate[/^(\d+)\s/,1]
       end
     end
   end

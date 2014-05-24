@@ -11,13 +11,13 @@ describe 'infiniband_rate fact' do
   it "should handle a single port" do
     Facter::Util::Infiniband.stubs(:get_ports).returns(["mlx4_0"])
     Facter::Util::Infiniband.stubs(:get_port_rate).with("mlx4_0").returns("20 Gb/sec (4X DDR)")
-    Facter.fact(:infiniband_rate).value.should == "20 Gb/sec (4X DDR)"
+    Facter.fact(:infiniband_rate).value.should == "20"
   end
 
   it "should handle multiple ports" do
     Facter::Util::Infiniband.stubs(:get_ports).returns(["mlx4_0","mlx4_1"])
     Facter::Util::Infiniband.stubs(:get_port_rate).with("mlx4_0").returns("20 Gb/sec (4X DDR)")
-    Facter.fact(:infiniband_rate).value.should == "20 Gb/sec (4X DDR)"
+    Facter.fact(:infiniband_rate).value.should == "20"
   end
   
   it "should return nil for unknown port name" do

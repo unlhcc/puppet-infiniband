@@ -76,19 +76,18 @@ describe Facter::Util::Infiniband do
   describe 'get_port_rate' do
     it 'should return rate for DDR device' do
       Dir.expects(:glob).with('/sys/class/infiniband/mlx4_0/ports/*').returns(['/sys/class/infiniband/mlx4_0/ports/1'])
-      File.expects(:exist?).with('/sys/class/infiniband/mlx4_0/ports/1/rate').returns(true)
       Facter::Util::Infiniband.expects(:read_sysfs).with("/sys/class/infiniband/mlx4_0/ports/1/rate").returns("20 Gb/sec (4X DDR)")
       Facter::Util::Infiniband.get_port_rate("mlx4_0").should == "20 Gb/sec (4X DDR)"
     end
 
-    it 'should return false when Dir.glob is empty' do
+    it 'should return nil when Dir.glob is empty' do
       Dir.expects(:glob).with('/sys/class/infiniband/mlx4_0/ports/*').returns([])
       Facter::Util::Infiniband.get_port_rate("mlx4_0").should == nil
     end
 
-    it 'should return false when sysfs rate file does not exist' do
+    it 'should return nil when read_sysfs is nil' do
       Dir.expects(:glob).with('/sys/class/infiniband/mlx4_0/ports/*').returns(['/sys/class/infiniband/mlx4_0/ports/1'])
-      File.expects(:exist?).with('/sys/class/infiniband/mlx4_0/ports/1/rate').returns(false)
+      Facter::Util::Infiniband.expects(:read_sysfs).with("/sys/class/infiniband/mlx4_0/ports/1/rate").returns(nil)
       Facter::Util::Infiniband.get_port_rate("mlx4_0").should == nil
     end
   end
