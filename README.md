@@ -243,5 +243,6 @@ If you have Vagrant >= 1.2.0 installed you can run system tests
 ## TODO
 
 * Additional facts for IB firmware version, card model, etc.
+* Refactor the infiniband facts to be dynamic based on ports found
 * Manage the ibacm service
 * Use the anchor pattern and separate the install, config and service resources into separate classes
