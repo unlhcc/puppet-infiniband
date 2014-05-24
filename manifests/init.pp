@@ -12,6 +12,11 @@ class infiniband (
   $rdma_service_name            = $infiniband::params::rdma_service_name,
   $rdma_service_has_status      = $infiniband::params::rdma_service_has_status,
   $rdma_service_has_restart     = $infiniband::params::rdma_service_has_restart,
+  $ibacm_service_ensure         = $infiniband::params::ibacm_service_ensure,
+  $ibacm_service_enable         = $infiniband::params::ibacm_service_enable,
+  $ibacm_service_name           = $infiniband::params::ibacm_service_name,
+  $ibacm_service_has_status     = $infiniband::params::ibacm_service_has_status,
+  $ibacm_service_has_restart    = $infiniband::params::ibacm_service_has_restart,
   $interfaces                   = $infiniband::params::interfaces,
   $rdma_conf_path               = $infiniband::params::rdma_conf_path,
   $ipoib_load                   = 'yes',
@@ -71,6 +76,15 @@ class infiniband (
     hasstatus   => $rdma_service_has_status,
     hasrestart  => $rdma_service_has_restart,
     require     => Package['rdma'],
+  }
+
+  service { 'ibacm':
+    ensure      => $ibacm_service_ensure,
+    enable      => $ibacm_service_enable,
+    name        => $ibacm_service_name,
+    hasstatus   => $ibacm_service_has_status,
+    hasrestart  => $ibacm_service_has_restart,
+    require     => [ Package['ibacm'], Service['rdma'] ],
   }
 
   if $interfaces and !empty($interfaces) {

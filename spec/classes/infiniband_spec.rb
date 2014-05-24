@@ -80,6 +80,17 @@ describe 'infiniband' do
     })
   end
 
+  it do
+    should contain_service('ibacm').with({
+      'ensure'      => 'running',
+      'enable'      => 'true',
+      'name'        => 'ibacm',
+      'hasstatus'   => 'true',
+      'hasrestart'  => 'true',
+      'require'     => ['Package[ibacm]','Service[rdma]'],
+    })
+  end
+
   it { should have_shellvar_resource_count(7) }
 
   shellvars.each_pair do |name,params|
@@ -102,6 +113,13 @@ describe 'infiniband' do
 
     it do
       should contain_service('rdma').with({
+        'ensure'      => 'stopped',
+        'enable'      => 'false',
+      })
+    end
+
+    it do
+      should contain_service('ibacm').with({
         'ensure'      => 'stopped',
         'enable'      => 'false',
       })

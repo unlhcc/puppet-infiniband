@@ -40,6 +40,9 @@ class infiniband::params {
       $rdma_service_name = 'rdma'
       $rdma_service_has_status = true
       $rdma_service_has_restart = true
+      $ibacm_service_name = 'ibacm'
+      $ibacm_service_has_status = true
+      $ibacm_service_has_restart = true
       $rdma_conf_path = '/etc/rdma/rdma.conf'
     }
 
@@ -52,11 +55,15 @@ class infiniband::params {
     /true/ : {
       $rdma_service_ensure    = 'running'
       $rdma_service_enable    = true
+      $ibacm_service_ensure   = 'running'
+      $ibacm_service_enable   = true
     }
 
     default : {
       $rdma_service_ensure    = 'stopped'
       $rdma_service_enable    = false
+      $ibacm_service_ensure   = 'stopped'
+      $ibacm_service_enable   = false
     }
   }
 
