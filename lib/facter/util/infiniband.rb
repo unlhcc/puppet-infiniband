@@ -78,4 +78,21 @@ class Facter::Util::Infiniband
     ports = Dir.glob('/sys/class/infiniband/*').collect { |d| File.basename(d) }
     ports
   end
+
+  # Returns rate of InifniBand port
+  #
+  # @return [String]
+  #
+  # @api private
+  def self.get_port_rate(port)
+    port_sysfs_path = Dir.glob(File.join('/sys/class/infiniband', port, 'ports', '*')).first
+    return nil if port_sysfs_path.nil?
+
+    rate_sysfs_path = File.join(port_sysfs_path, 'rate')
+
+    return nil unless File.exist?(rate_sysfs_path)
+
+    rate = self.read_sysfs(rate_sysfs_path)
+    rate
+  end
 end

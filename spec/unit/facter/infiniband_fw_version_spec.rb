@@ -38,7 +38,7 @@ describe 'infiniband_fw_version fact' do
     Facter.fact(:infiniband_fw_version).value.should == nil
   end
 
-  it "should return nil if no no ports found" do
+  it "should return nil if no ports found" do
     Facter::Util::Infiniband.stubs(:get_ports).returns([])
     Facter.fact(:infiniband_fw_version).value.should == nil
   end
