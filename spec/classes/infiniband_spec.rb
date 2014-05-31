@@ -12,25 +12,25 @@ def shellvars
   }
 end
 
-def packages
+def base_packages
   [
-    'libibcm',
-    'libibverbs',
-    'libibverbs-utils',
-    'librdmacm',
-    'librdmacm-utils',
-    'rdma',
     'dapl',
     'ibacm',
     'ibsim',
     'ibutils',
     'libcxgb3',
+    'libibcm',
     'libibmad',
     'libibumad',
+    'libibverbs',
+    'libibverbs-utils',
     'libipathverbs',
     'libmlx4',
     'libmthca',
     'libnes',
+    'librdmacm',
+    'librdmacm-utils',
+    'rdma',
     'rds-tools',
   ]
 end
@@ -59,137 +59,56 @@ describe 'infiniband' do
   it { should create_class('infiniband') }
   it { should contain_class('infiniband::params') }
 
-  it { should have_package_resource_count(18) }
+  it { should contain_anchor('infiniband::start').that_comes_before('Class[infiniband::install]') }
+  it { should contain_class('infiniband::install').that_comes_before('Class[infiniband::config]') }
+  it { should contain_class('infiniband::config').that_comes_before('Class[infiniband::service]') }
+  it { should contain_class('infiniband::service').that_comes_before('Class[infiniband::providers]') }
+  it { should contain_class('infiniband::providers').that_comes_before('Anchor[infiniband::end]') }
+  it { should contain_anchor('infiniband::end') }
 
-  packages.each do |package|
-    it { should contain_package(package).with({ 'ensure' => 'present' }) }
-  end
+  context "infiniband::install" do
+    it { should have_package_resource_count(base_packages.size + optional_packages.size) }
 
-  optional_packages.each do |optional_package|
-    it { should_not contain_package(optional_package) }
-  end
-
-  it do
-    should contain_service('rdma').with({
-      'ensure'      => 'running',
-      'enable'      => 'true',
-      'name'        => 'rdma',
-      'hasstatus'   => 'true',
-      'hasrestart'  => 'true',
-      'require'     => 'Package[rdma]',
-    })
-  end
-
-  it do
-    should contain_service('ibacm').with({
-      'ensure'      => 'running',
-      'enable'      => 'true',
-      'name'        => 'ibacm',
-      'hasstatus'   => 'true',
-      'hasrestart'  => 'true',
-      'require'     => ['Package[ibacm]','Service[rdma]'],
-    })
-  end
-
-  it { should have_shellvar_resource_count(7) }
-
-  shellvars.each_pair do |name,params|
-    it do
-      should contain_shellvar("infiniband #{name}").with({
-        'ensure'  => 'present',
-        'target'    => '/etc/rdma/rdma.conf',
-        'notify'    => 'Service[rdma]',
-        'require'   => 'Package[rdma]',
-        'variable'  => name,
-        'value'     => params['value'],
-      })
+    base_packages.each do |package|
+      it { should contain_package(package).with_ensure('present') }
     end
-  end
-
-  it { should_not contain_file('/etc/modprobe.d/mlx4_core.conf') }
-
-  context "has_infiniband is false" do
-    let(:facts) { default_facts.merge({:has_infiniband => false }) }
-
-    it do
-      should contain_service('rdma').with({
-        'ensure'      => 'stopped',
-        'enable'      => 'false',
-      })
-    end
-
-    it do
-      should contain_service('ibacm').with({
-        'ensure'      => 'stopped',
-        'enable'      => 'false',
-      })
-    end
-
-    shellvars.keys.each do |name|
-      it { should contain_shellvar("infiniband #{name}").without_notify }
-    end
-  end
-
-  context 'with_optional_packages => true' do
-    let(:params) {{ :with_optional_packages => true }}
-
-    it { should have_package_resource_count(25) }
 
     optional_packages.each do |optional_package|
       it { should contain_package(optional_package).with_ensure('present') }
     end
 
-    context "when with_optional_packages => true and packages => ['foo']" do
-      let(:params) {{ :with_optional_packages => true, :packages => ['foo'] }}
+    context 'with_optional_packages => false' do
+      let(:params) {{ :with_optional_packages => false }}
 
-      it { should have_package_resource_count(1) }
-
-      it { should contain_package('foo').with_ensure('present') }
+      it { should have_package_resource_count(base_packages.size) }
 
       optional_packages.each do |optional_package|
         it { should_not contain_package(optional_package) }
       end
 
+      context "when with_optional_packages => true and packages => ['foo']" do
+        let(:params) {{ :with_optional_packages => true, :packages => ['foo'] }}
+
+        it { should have_package_resource_count(1) }
+        it { should contain_package('foo').with_ensure('present') }
+      end
     end
   end
 
-  shared_context "interfaces" do
-    it { should have_infiniband__interface_resource_count(1) }
+  context "infiniband::config" do
+    it { should have_shellvar_resource_count(7) }
 
-    it do
-      should contain_infiniband__interface('ib0').with({
-        'ipaddr'  => '192.168.1.1',
-        'netmask' => '255.255.255.0',
-      })
+    shellvars.each_pair do |name,params|
+      it do
+        should contain_shellvar("infiniband #{name}").with({
+          'ensure'  => 'present',
+          'target'    => '/etc/rdma/rdma.conf',
+          'variable'  => name,
+          'value'     => params['value'],
+        })
+      end
     end
-  end 
 
-  context "with parameter interfaces defined" do
-    let(:params) {{ :interfaces => interfaces_example }}
-
-    include_context 'interfaces'
-  end
-
-  context "with top-scope variable infiniband_interfaces defined" do
-    let(:facts) {default_facts.merge({:infiniband_interfaces => interfaces_example }) }
-
-    include_context 'interfaces'
-  end
-
-  context "with interfaces => {}" do
-    let(:params) {{:interfaces => {}}}
-    it { should have_infiniband__interface_resource_count(0) }
-  end
-
-  context "with interfaces => false" do
-    let(:params) {{:interfaces => false}}
-     it 'should raise error' do
-       expect raise_error(Puppet::Error, /false is not a Hash/)
-     end
-  end
-
-  context "when manage_mlx4_core_options => true" do
-    let(:params) {{ :manage_mlx4_core_options => true }}
 
     it do
       should contain_file('/etc/modprobe.d/mlx4_core.conf').with({
@@ -197,7 +116,6 @@ describe 'infiniband' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'before'  => 'Service[rdma]',
       })
     end
 
@@ -226,6 +144,70 @@ describe 'infiniband' do
         ])
       end
     end
+
+    context "when manage_mlx4_core_options => false" do
+      let(:params) {{ :manage_mlx4_core_options => false }}
+
+      it { should_not contain_file('/etc/modprobe.d/mlx4_core.conf') }
+    end
+  end
+
+  context "infiniband::service" do
+    it do
+      should contain_service('rdma').with({
+        'ensure'      => 'running',
+        'enable'      => 'true',
+        'name'        => 'rdma',
+        'hasstatus'   => 'true',
+        'hasrestart'  => 'true',
+        'before'      => 'Service[ibacm]',
+      })
+    end
+
+    it do
+      should contain_service('ibacm').with({
+        'ensure'      => 'running',
+        'enable'      => 'true',
+        'name'        => 'ibacm',
+        'hasstatus'   => 'true',
+        'hasrestart'  => 'true',
+      })
+    end
+
+    context "has_infiniband is false" do
+      let(:facts) { default_facts.merge({:has_infiniband => false }) }
+
+      it do
+        should contain_service('rdma').with({
+          'ensure'      => 'stopped',
+          'enable'      => 'false',
+        })
+      end
+
+      it do
+        should contain_service('ibacm').with({
+          'ensure'      => 'stopped',
+          'enable'      => 'false',
+        })
+      end
+    end
+  end
+
+  context "infiniband::providers" do
+    it { should have_infiniband__interface_resource_count(0) }
+
+    context "with parameter interfaces defined" do
+      let(:params) {{ :interfaces => interfaces_example }}
+
+      it { should have_infiniband__interface_resource_count(1) }
+
+      it do
+        should contain_infiniband__interface('ib0').with({
+          'ipaddr'  => '192.168.1.1',
+          'netmask' => '255.255.255.0',
+        })
+      end
+    end
   end
 
   # Test validate_bool parameters
@@ -239,6 +221,7 @@ describe 'infiniband' do
     end
   end
 
+  # Test validate_re parameters
   [
     'ipoib_load',
     'srp_load',
@@ -253,15 +236,13 @@ describe 'infiniband' do
     end
   end
 
+  # Test validate_hash parameters
   [
-    'packages',
-    'mandatory_packages',
-    'default_packages',
-    'optional_packages',
+    'interfaces',
   ].each do |p|
     context "when #{p} => 'foo'" do
       let(:params) {{ p.to_sym => 'foo' }}
-      it { expect { should create_class('infiniband') }.to raise_error(Puppet::Error, /is not an Array/) }
+      it { expect { should create_class('infiniband') }.to raise_error(Puppet::Error, /is not a Hash/) }
     end
   end
 end

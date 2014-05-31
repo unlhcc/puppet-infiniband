@@ -3,31 +3,28 @@ class infiniband::params {
 
   case $::osfamily {
     'RedHat': {
-      $infiniband_support_mandatory_packages = [
-        'libibcm',
-        'libibverbs',
-        'libibverbs-utils',
-        'librdmacm',
-        'librdmacm-utils',
-        'rdma',
-      ]
-
-      $infiniband_support_default_packages = [
+      $base_packages = [
         'dapl',
         'ibacm',
         'ibsim',
         'ibutils',
         'libcxgb3',
+        'libibcm',
         'libibmad',
         'libibumad',
+        'libibverbs',
+        'libibverbs-utils',
         'libipathverbs',
         'libmlx4',
         'libmthca',
         'libnes',
+        'librdmacm',
+        'librdmacm-utils',
+        'rdma',
         'rds-tools',
       ]
 
-      $infiniband_support_optional_packages = [
+      $optional_packages = [
         'compat-dapl',
         'infiniband-diags',
         'libibcommon',
@@ -37,13 +34,13 @@ class infiniband::params {
         'srptools',
       ]
 
-      $rdma_service_name = 'rdma'
-      $rdma_service_has_status = true
-      $rdma_service_has_restart = true
-      $ibacm_service_name = 'ibacm'
-      $ibacm_service_has_status = true
-      $ibacm_service_has_restart = true
-      $rdma_conf_path = '/etc/rdma/rdma.conf'
+      $rdma_service_name          = 'rdma'
+      $rdma_service_has_status    = true
+      $rdma_service_has_restart   = true
+      $ibacm_service_name         = 'ibacm'
+      $ibacm_service_has_status   = true
+      $ibacm_service_has_restart  = true
+      $rdma_conf_path             = '/etc/rdma/rdma.conf'
     }
 
     default: {
@@ -51,25 +48,17 @@ class infiniband::params {
     }
   }
 
+  # Set default service states based on has_infiniband fact value
   case $::has_infiniband {
     /true/ : {
-      $rdma_service_ensure    = 'running'
-      $rdma_service_enable    = true
-      $ibacm_service_ensure   = 'running'
-      $ibacm_service_enable   = true
+      $service_ensure = 'running'
+      $service_enable = true
     }
 
     default : {
-      $rdma_service_ensure    = 'stopped'
-      $rdma_service_enable    = false
-      $ibacm_service_ensure   = 'stopped'
-      $ibacm_service_enable   = false
+      $service_ensure = 'stopped'
+      $service_enable = false
     }
-  }
-
-  $interfaces = $::infiniband_interfaces ? {
-    undef   => false,
-    default => $::infiniband_interfaces,
   }
 
 }

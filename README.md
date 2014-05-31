@@ -31,10 +31,14 @@ Define a IBoIP interface
 
 #### Public classes
 
-* `infiniband`: Installs and configures a system to use Infiniband
+* `infiniband`: Installs and configures a system to use InfiniBand
 
 #### Private lasses
 
+* `infiniband::install`: Installs the InfiniBand packages.
+* `infiniband::config`: Manages the rdma.conf file and the mlx4_core module options.
+* `infiniband::service`: Manages the rdma and ibacm services.
+* `infiniband::providers`: Creates infiniband::interface defined types based on the interfaces parameter.
 * `infiniband::params`: Sets default values based on the `osfamily` and `has_infiniband` facts.
 
 ### Parameters
@@ -45,19 +49,7 @@ Define a IBoIP interface
 
 The packges to install infiniband support.  Default is 'UNSET'.
 
-If 'UNSET' the packages installed are pulled from the `mandatory_packages`, `default_packages` and `optional_packages` (if `with_optinal_packages` is true).
-
-#####`mandatory_packages`
-
-The 'mandatory' packages as defined by the 'Infiniband Support' package group in EL6.
-
-#####`default_packages`
-
-The 'default' packages as defined by the 'Infiniband Support' package group in EL6.
-
-#####`optional_packages`
-
-The 'optional' packages as defined by the 'Infiniband Support' package group in EL6 with exception of 'glusterfs-rdma' and 'opensm' packages.
+If 'UNSET' the entire set of Infiniband Support packages will be installed.
 
 #####`with_optional_packages`
 
@@ -83,9 +75,25 @@ RDMA service has_status parameter (defaults to true).
 
 RDMA service has_restart parameter (defaults to true).
 
-#####`interfaces`
+#####`ibacm_service_ensure`
 
-This Hash can be used to define `infiniband::interface` resources (defaults to false).  This parameter can also be defined using the top-scope variable `infiniband_interfaces`.
+ibacm service ensure parameter.  Default to 'running' if `has_infiniband` fact is 'true', and 'stopped' if 'has_infiniband' fact is 'false'.
+
+#####`ibacm_service_enable`
+
+ibacm service enable parameter.  Default to true if `has_infiniband` fact is 'true', and false if 'has_infiniband' fact is 'false'.
+
+#####`ibacm_service_name`
+
+ibacm service name (defaults to 'ibacm').
+
+#####`ibacm_service_has_status`
+
+ibacm service has_status parameter (defaults to true).
+
+#####`ibacm_service_has_restart`
+
+ibacm service has_restart parameter (defaults to true).
 
 #####`rdma_conf_path`
 
@@ -121,7 +129,7 @@ Sets the `NFSoRDMA_PORT` setting for the RDMA service (defaults to '2050').
 
 #####`manage_mlx4_core_options`
 
-Boolean that determines if '/etc/modprobe.d/mlx4_core.conf' should be managed (defaults to false).
+Boolean that determines if '/etc/modprobe.d/mlx4_core.conf' should be managed (defaults to true).
 
 #####`log_num_mtt`
 
@@ -132,6 +140,10 @@ When the value is 'UNSET' the value is determined using the `calc_log_num_mtt` p
 #####`log_mtts_per_seg`
 
 Sets the mlx4_core module's 'log_mtts_per_seq' value.  Defaults to '3'.
+
+#####`interfaces`
+
+This Hash can be used to define `infiniband::interface` resources (defaults to an empty Hash).
 
 ### Defines
 
@@ -190,6 +202,13 @@ Returns the board_id (PSID) of the InfiniBand interface card.
 
 **NOTE:** Only supports getting the value from the first interface card found.
 
+#### infiniband_rate
+
+Returns the rate of the InfiniBand interface card.
+
+**NOTE:** Only supports getting the value from the first interface card found.
+
+
 ### Functions
 
 #### calc_log_num_mtt
@@ -244,5 +263,3 @@ If you have Vagrant >= 1.2.0 installed you can run system tests
 
 * Additional facts for IB firmware version, card model, etc.
 * Refactor the infiniband facts to be dynamic based on ports found
-* Manage the ibacm service
-* Use the anchor pattern and separate the install, config and service resources into separate classes
