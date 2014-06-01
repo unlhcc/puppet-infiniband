@@ -6,5 +6,8 @@ fixtures:
     augeasproviders:
       repo: git://github.com/hercules-team/augeasproviders.git
       ref: v1.0.2
+    network:
+      repo: git://github.com/razorsedge/puppet-network.git
+      ref: 3.2.0
   symlinks:
     infiniband: "#{source_dir}"

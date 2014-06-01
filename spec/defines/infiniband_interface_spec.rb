@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe 'infiniband::interface' do
+  include_context :defaults
+
+  let(:facts) { default_facts }
+
   let :title do
     'ib0'
   end
@@ -16,14 +20,15 @@ describe 'infiniband::interface' do
     default_params
   end
 
+  it { should contain_class('network') }
+
   it do
     should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with({
       'ensure'  => 'present',
       'owner'   => 'root',
       'group'   => 'root',
       'mode'    => '0644',
-      'notify'  => 'Service[rdma]',
-      'require' => 'Package[rdma]',
+      'notify'  => 'Service[network]',
     })
   end
 

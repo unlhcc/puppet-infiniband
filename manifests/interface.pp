@@ -10,6 +10,8 @@ define infiniband::interface(
   $connected_mode = 'yes'
 ) {
 
+  include network
+
   validate_re($ensure, ['^present$','^absent$'])
 
   $enable_real = is_string($enable) ? {
@@ -32,8 +34,7 @@ define infiniband::interface(
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    notify  => Service['rdma'],
-    require => Package['rdma'],
+    notify  => Service['network'],
   }
 
 }
