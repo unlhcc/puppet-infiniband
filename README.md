@@ -33,7 +33,7 @@ Define a IBoIP interface
 
 * `infiniband`: Installs and configures a system to use InfiniBand
 
-#### Private lasses
+#### Private classes
 
 * `infiniband::install`: Installs the InfiniBand packages.
 * `infiniband::config`: Manages the rdma.conf file and the mlx4_core module options.
