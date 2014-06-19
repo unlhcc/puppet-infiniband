@@ -4,6 +4,12 @@ Release notes for the treydock-infiniband module.
 
 ------------------------------------------
 
+#### 2014-06-18 Release 0.1.1
+
+* Fix LICENSE file - wget fail!
+
+------------------------------------------
+
 #### 2014-05-22 Release 0.1.0
 
 This release contains new backwards compatible features.
