@@ -13,26 +13,48 @@ def shellvars
 end
 
 def base_packages
-  [
-    'dapl',
-    'ibacm',
-    'ibsim',
-    'ibutils',
-    'libcxgb3',
-    'libibcm',
-    'libibmad',
-    'libibumad',
-    'libibverbs',
-    'libibverbs-utils',
-    'libipathverbs',
-    'libmlx4',
-    'libmthca',
-    'libnes',
-    'librdmacm',
-    'librdmacm-utils',
-    'rdma',
-    'rds-tools',
-  ]
+  {
+    'el7' => [
+      'dapl',
+      'ibacm',
+      'ibutils',
+      'libcxgb3',
+      'libcxgb4',
+      'libibcm',
+      'libibmad',
+      'libibumad',
+      'libibverbs',
+      'libibverbs-utils',
+      'libipathverbs',
+      'libmlx4',
+      'libmlx5',
+      'libmthca',
+      'libnes',
+      'librdmacm',
+      'librdmacm-utils',
+      'rdma',
+    ],
+    'el6' => [
+      'dapl',
+      'ibacm',
+      'ibsim',
+      'ibutils',
+      'libcxgb3',
+      'libibcm',
+      'libibmad',
+      'libibumad',
+      'libibverbs',
+      'libibverbs-utils',
+      'libipathverbs',
+      'libmlx4',
+      'libmthca',
+      'libnes',
+      'librdmacm',
+      'librdmacm-utils',
+      'rdma',
+      'rds-tools',
+    ]
+  }
 end
 
 def optional_packages
@@ -67,9 +89,9 @@ describe 'infiniband' do
   it { should contain_anchor('infiniband::end') }
 
   context "infiniband::install" do
-    it { should have_package_resource_count(base_packages.size + optional_packages.size) }
+    it { should have_package_resource_count(base_packages['el6'].size + optional_packages.size) }
 
-    base_packages.each do |package|
+    base_packages['el6'].each do |package|
       it { should contain_package(package).with_ensure('present') }
     end
 
@@ -80,7 +102,7 @@ describe 'infiniband' do
     context 'with_optional_packages => false' do
       let(:params) {{ :with_optional_packages => false }}
 
-      it { should have_package_resource_count(base_packages.size) }
+      it { should have_package_resource_count(base_packages['el6'].size) }
 
       optional_packages.each do |optional_package|
         it { should_not contain_package(optional_package) }
@@ -91,6 +113,30 @@ describe 'infiniband' do
 
         it { should have_package_resource_count(1) }
         it { should contain_package('foo').with_ensure('present') }
+      end
+    end
+
+    context 'operatingsystemmajrelease => 7' do
+      let(:facts) { default_facts.merge({:operatingsystemmajrelease => '7'}) }
+
+      it { should have_package_resource_count(base_packages['el7'].size + optional_packages.size) }
+
+      base_packages['el7'].each do |package|
+        it { should contain_package(package).with_ensure('present') }
+      end
+
+      optional_packages.each do |optional_package|
+        it { should contain_package(optional_package).with_ensure('present') }
+      end
+
+      context 'with_optional_packages => false' do
+        let(:params) {{ :with_optional_packages => false }}
+
+        it { should have_package_resource_count(base_packages['el7'].size) }
+
+        optional_packages.each do |optional_package|
+          it { should_not contain_package(optional_package) }
+        end
       end
     end
   end

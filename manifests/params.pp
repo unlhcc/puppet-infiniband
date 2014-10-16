@@ -3,26 +3,51 @@ class infiniband::params {
 
   case $::osfamily {
     'RedHat': {
-      $base_packages = [
-        'dapl',
-        'ibacm',
-        'ibsim',
-        'ibutils',
-        'libcxgb3',
-        'libibcm',
-        'libibmad',
-        'libibumad',
-        'libibverbs',
-        'libibverbs-utils',
-        'libipathverbs',
-        'libmlx4',
-        'libmthca',
-        'libnes',
-        'librdmacm',
-        'librdmacm-utils',
-        'rdma',
-        'rds-tools',
-      ]
+      if versioncmp($::operatingsystemmajrelease, '7') == 0 {
+        $base_packages = [
+          'dapl',
+          'ibacm',
+          'ibutils',
+          'libcxgb3',
+          'libcxgb4',
+          'libibcm',
+          'libibmad',
+          'libibumad',
+          'libibverbs',
+          'libibverbs-utils',
+          'libipathverbs',
+          'libmlx4',
+          'libmlx5',
+          'libmthca',
+          'libnes',
+          'librdmacm',
+          'librdmacm-utils',
+          'rdma',
+        ]
+      } elsif versioncmp($::operatingsystemmajrelease, '6') == 0 {
+        $base_packages = [
+          'dapl',
+          'ibacm',
+          'ibsim',
+          'ibutils',
+          'libcxgb3',
+          'libibcm',
+          'libibmad',
+          'libibumad',
+          'libibverbs',
+          'libibverbs-utils',
+          'libipathverbs',
+          'libmlx4',
+          'libmthca',
+          'libnes',
+          'librdmacm',
+          'librdmacm-utils',
+          'rdma',
+          'rds-tools',
+        ]
+      } else {
+        fail("Unsupported operatingsystemmajrelease: ${::operatingsystemmajrelease}, module ${module_name} only supports osfamily RedHat 6 and 7")
+      }
 
       $optional_packages = [
         'compat-dapl',

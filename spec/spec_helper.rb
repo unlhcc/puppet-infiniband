@@ -5,13 +5,13 @@ shared_context :defaults do
 
   let :default_facts do
     {
-      :kernel                 => 'Linux',
-      :osfamily               => 'RedHat',
-      :operatingsystem        => 'CentOS',
-      :operatingsystemrelease => '6.4',
-      :architecture           => 'x86_64',
-      :has_infiniband         => 'true',
-      :memorysize_mb          => '64399.75',
+      :kernel                     => 'Linux',
+      :osfamily                   => 'RedHat',
+      :operatingsystem            => 'CentOS',
+      :operatingsystemmajrelease  => '6',
+      :architecture               => 'x86_64',
+      :has_infiniband             => 'true',
+      :memorysize_mb              => '64399.75',
     }
   end
 end
