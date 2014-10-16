@@ -15,18 +15,17 @@ This release is a fairly large rewrite of the module with backwards incompatible
 * parameters for mandator, default and optional packages removed
 * Remove documented support for Scientific Linux 6
   * packages exist that conflict with upstream package names
+* Replace dependency of domcleal/augeasproviders with herculesteam/augeasproviders_shellvar
 
-##### Features:
+##### Changes:
 
 * Support EL7
 * Manage the ibacm service
 * Add infiniband_rate fact to detect an Infiniband port's reported rate
-* Updated unit and acceptance tests
-
-##### Bugfixes:
-
 * Shellvar resources no longer notify the rdma service
 * Add dependency for razorsedge-network to ensure network service is restarted
+* Updated unit and acceptance tests
+* Replace Modulefile with metadata.json
 
 ------------------------------------------
 

@@ -1,0 +1,27 @@
+{
+  "name": "treydock-infiniband",
+  "version": "1.0.0",
+  "author": "treydock",
+  "summary": "Infiniband module",
+  "license": "Apache License, Version 2.0",
+  "source": "git://github.com/treydock/puppet-infiniband.git",
+  "project_page": "http://github.com/treydock/puppet-infiniband",
+  "description": "Infiniband module",
+  "issues_url": "https://github.com/treydock/puppet-infiniband/issues",
+  "tags": [ "infiniband", "hpc", "rdma", "redhat", "centos" ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [ "6.0", "7.0" ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [ "6.0", "7.0" ]
+    }
+  ],
+  "dependencies": [
+    { "name":"puppetlabs-stdlib", "version_requirement": ">= 3.2.0" },
+    { "name":"razorsedge-network", "version_requirement": "3.x" },
+    { "name":"herculesteam-augeasproviders_shellvar", "version_requirement": ">= 2.0.0" }
+  ]
+}
