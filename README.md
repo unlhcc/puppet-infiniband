@@ -6,8 +6,7 @@ Installs the InfiniBand software stack.
 
 ## Support
 
-* CentOS 6 x86_64
-* Scientific Linux 6 x86_64
+* CentOS 6 & 7 x86_64
 
 ## Usage
 
@@ -190,13 +189,13 @@ String: defaults to 'yes'.  The CONNECTED_MODE for the infiniband interface.
 
 Determine if the system's hardware supports InfiniBand.
 
-#### infiniband_fw_version
+#### infiniband\_fw\_version
 
 Reports the firmware version of the InfiniBand interface card.
 
 **NOTE:** Only supports getting the value from the first interface card found.
 
-#### infiniband_board_id
+#### infiniband\_board\_id
 
 Returns the board_id (PSID) of the InfiniBand interface card.
 
@@ -211,20 +210,20 @@ Returns the rate of the InfiniBand interface card.
 
 ### Functions
 
-#### calc_log_num_mtt
+#### calc\_log\_num\_mtt
 
-This function calculates the appropriate value for mlx4_core module's 'log_num_mtt' parameter.
+This function calculates the appropriate value for mlx4_core module's 'log\_num\_mtt' parameter.
 
 The formula is `max_reg_mem = (2^log_num_mtt) * (2^log_mtts_per_seg) * (page_size_bytes)`.  This function finds the
- log_num_mtt necessary to make 'max_reg_mem' twice the size of system's RAM.  Ref: http://community.mellanox.com/docs/DOC-1120.
+ log\_num\_mtt necessary to make 'max\_reg\_mem' twice the size of system's RAM.  Ref: http://community.mellanox.com/docs/DOC-1120.
 
 *Usage*:
 
 calc_log_num_mtt(`memorysize_mb`, `log_mtts_per_seg`, `page_size_bytes`)
 
 * memorysize_mb - The system's memory size in MBs.  This argument is required.
-* log_mtts_per_seg - The value for log_mtts_per_seg.  Defaults to '3' if undefined.
-* page_size_bytes - The system's page size in bytes.  Defaults to '4096' if undefined.
+* log\_mtts\_per\_seg - The value for log\_mtts\_per\_seg.  Defaults to '3' if undefined.
+* page\_size\_bytes - The system's page size in bytes.  Defaults to '4096' if undefined.
 
 *Examples*:
 
@@ -257,9 +256,10 @@ Run unit tests
 
 If you have Vagrant >= 1.2.0 installed you can run system tests
 
-    bundle exec rake acceptance
+    bundle exec rake beaker
 
 ## TODO
 
 * Additional facts for IB firmware version, card model, etc.
 * Refactor the infiniband facts to be dynamic based on ports found
+* Use structured facts based on IB ports found

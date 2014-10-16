@@ -4,6 +4,32 @@ Release notes for the treydock-infiniband module.
 
 ------------------------------------------
 
+#### 2014-10-16 Release 1.0.0
+
+This release is a fairly large rewrite of the module with backwards incompatible changes.
+
+##### Backwards-incompatible changes:
+
+* `manage_mlx4_core_options` parameter now defaults to true
+* `with_optional_packages` parameter now defaults to true
+* parameters for mandator, default and optional packages removed
+* Remove documented support for Scientific Linux 6
+  * packages exist that conflict with upstream package names
+
+##### Features:
+
+* Support EL7
+* Manage the ibacm service
+* Add infiniband_rate fact to detect an Infiniband port's reported rate
+* Updated unit and acceptance tests
+
+##### Bugfixes:
+
+* Shellvar resources no longer notify the rdma service
+* Add dependency for razorsedge-network to ensure network service is restarted
+
+------------------------------------------
+
 #### 2014-06-18 Release 0.1.1
 
 * Fix LICENSE file - wget fail!
