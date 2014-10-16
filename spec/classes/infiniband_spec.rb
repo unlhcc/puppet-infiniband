@@ -70,9 +70,14 @@ def optional_packages
 end
 
 describe 'infiniband' do
-  include_context :defaults
-
-  let(:facts) { default_facts }
+  let :facts do
+    {
+      :osfamily                   => 'RedHat',
+      :operatingsystemmajrelease  => '6',
+      :has_infiniband             => 'true',
+      :memorysize_mb              => '64399.75',
+    }
+  end
 
   let :interfaces_example do
     { 'ib0' => {'ipaddr' => '192.168.1.1', 'netmask'  => '255.255.255.0'} }
@@ -117,7 +122,13 @@ describe 'infiniband' do
     end
 
     context 'operatingsystemmajrelease => 7' do
-      let(:facts) { default_facts.merge({:operatingsystemmajrelease => '7'}) }
+      let :facts do
+        {
+          :osfamily                   => 'RedHat',
+          :operatingsystemmajrelease  => '7',
+          :has_infiniband             => 'true',
+        }
+      end
 
       it { should have_package_resource_count(base_packages['el7'].size + optional_packages.size) }
 
@@ -221,7 +232,13 @@ describe 'infiniband' do
     end
 
     context "has_infiniband is false" do
-      let(:facts) { default_facts.merge({:has_infiniband => false }) }
+      let :facts do
+        {
+          :osfamily                   => 'RedHat',
+          :operatingsystemmajrelease  => '6',
+          :has_infiniband             => 'false',
+        }
+      end
 
       it do
         should contain_service('rdma').with({

@@ -1,9 +1,13 @@
 require 'spec_helper'
 
 describe 'infiniband::interface' do
-  include_context :defaults
-
-  let(:facts) { default_facts }
+  let :facts do
+    {
+      :osfamily                   => 'RedHat',
+      :operatingsystemmajrelease  => '6',
+      :has_infiniband             => 'true',
+    }
+  end
 
   let :title do
     'ib0'
