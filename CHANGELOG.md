@@ -4,6 +4,13 @@ Release notes for the treydock-infiniband module.
 
 ------------------------------------------
 
+#### 2014-11-04 Release 1.1.0
+
+This is a backwards compatible feature release that adds support for
+EL 6.6 which added packages to the 'Infiniband Support' package group.
+
+------------------------------------------
+
 #### 2014-10-16 Release 1.0.0
 
 This release is a fairly large rewrite of the module with backwards incompatible changes.
