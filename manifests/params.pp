@@ -24,6 +24,50 @@ class infiniband::params {
           'librdmacm-utils',
           'rdma',
         ]
+
+        $optional_packages = [
+          'compat-dapl',
+          'infiniband-diags',
+          'libibcommon',
+          'mstflint',
+          'perftest',
+          'qperf',
+          'srptools',
+        ]
+      } elsif versioncmp($::operatingsystemrelease , '6.6') >= 0 {
+        $base_packages = [
+          'dapl',
+          'ibacm',
+          'ibsim',
+          'ibutils',
+          'libcxgb3',
+          'libehca',
+          'libibcm',
+          'libibmad',
+          'libibumad',
+          'libibverbs',
+          'libibverbs-utils',
+          'libipathverbs',
+          'libmlx4',
+          'libmlx5',
+          'libmthca',
+          'libnes',
+          'librdmacm',
+          'librdmacm-utils',
+          'rdma',
+          'rds-tools',
+        ]
+
+        $optional_packages = [
+          'compat-dapl',
+          'infiniband-diags',
+          'libibcommon',
+          'libocrdma',
+          'mstflint',
+          'perftest',
+          'qperf',
+          'srptools',
+        ]
       } elsif versioncmp($::operatingsystemmajrelease, '6') == 0 {
         $base_packages = [
           'dapl',
@@ -45,19 +89,19 @@ class infiniband::params {
           'rdma',
           'rds-tools',
         ]
+
+        $optional_packages = [
+          'compat-dapl',
+          'infiniband-diags',
+          'libibcommon',
+          'mstflint',
+          'perftest',
+          'qperf',
+          'srptools',
+        ]
       } else {
         fail("Unsupported operatingsystemmajrelease: ${::operatingsystemmajrelease}, module ${module_name} only supports osfamily RedHat 6 and 7")
       }
-
-      $optional_packages = [
-        'compat-dapl',
-        'infiniband-diags',
-        'libibcommon',
-        'mstflint',
-        'perftest',
-        'qperf',
-        'srptools',
-      ]
 
       $rdma_service_name          = 'rdma'
       $rdma_service_has_status    = true
