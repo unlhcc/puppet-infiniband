@@ -17,3 +17,6 @@
       facter: 2.0
     - puppet: 3.7.0
       facter: 1.7
+Gemfile:
+  optional:
+    - gem: yard

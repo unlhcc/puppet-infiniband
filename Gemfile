@@ -13,6 +13,7 @@ group :development, :test do
   gem 'simplecov',                :require => false
   gem 'coveralls',                :require => false
   gem 'rest-client', '~> 1.6.0',  :require => false if RUBY_VERSION =~ /^1.8/
+  gem 'yard',                     :require => false
 end
 
 if facterversion = ENV['FACTER_GEM_VERSION']

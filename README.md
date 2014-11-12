@@ -1,6 +1,7 @@
 # puppet-infiniband
 
-[![Build Status](https://travis-ci.org/treydock/puppet-infiniband.png)](https://travis-ci.org/treydock/puppet-infiniband)
+[![Puppet Forge](http://img.shields.io/puppetforge/v/treydock/infiniband.svg)](https://forge.puppetlabs.com/treydock/infiniband)
+[![Build Status](https://travis-ci.org/treydock/puppet-infiniband.svg?branch=master)](https://travis-ci.org/treydock/puppet-infiniband)
 
 Installs the InfiniBand software stack.
 
