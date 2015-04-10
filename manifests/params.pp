@@ -41,7 +41,6 @@ class infiniband::params {
           'ibsim',
           'ibutils',
           'libcxgb3',
-          'libehca',
           'libibcm',
           'libibmad',
           'libibumad',

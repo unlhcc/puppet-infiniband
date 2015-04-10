@@ -40,7 +40,6 @@ def base_packages
       'ibsim',
       'ibutils',
       'libcxgb3',
-      'libehca',
       'libibcm',
       'libibmad',
       'libibumad',
