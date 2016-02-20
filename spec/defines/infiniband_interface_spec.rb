@@ -65,6 +65,14 @@ describe 'infiniband::interface' do
     it { should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with_content(my_fixture_read('ifcfg-ib0_without_connected_mode')) }
   end
 
+  context 'mtu => 65520' do
+    let :params do
+      default_params.merge({:mtu => '65520'})
+    end
+
+    it { should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0'). with_content(my_fixture_read('ifcfg-ib0_with_mtu')) }
+  end
+
   context 'gateway => 192.168.1.254' do
     let :params do
       default_params.merge({:gateway => '192.168.1.254'})

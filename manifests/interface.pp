@@ -7,7 +7,8 @@ define infiniband::interface(
   $gateway        = 'UNSET',
   $ensure         = 'present',
   $enable         = true,
-  $connected_mode = 'yes'
+  $connected_mode = 'yes',
+  $mtu            = 'UNSET'
 ) {
 
   include network
