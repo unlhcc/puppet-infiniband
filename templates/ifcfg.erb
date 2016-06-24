@@ -9,3 +9,6 @@ NETMASK="<%= @netmask %>"
 GATEWAY="<%= @gateway %>"
 <% end -%>
 CONNECTED_MODE="<%= @connected_mode %>"
+<% if @mtu != 'UNSET' -%>
+MTU="<%= @mtu %>"
+<% end -%>
