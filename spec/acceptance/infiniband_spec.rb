@@ -20,7 +20,6 @@ describe 'infiniband class' do
       'rdma',
       'dapl',
       'ibacm',
-      'ibsim',
       'ibutils',
       'libcxgb3',
       'libibmad',
@@ -29,7 +28,6 @@ describe 'infiniband class' do
       'libmlx4',
       'libmthca',
       'libnes',
-      'rds-tools',
     ].each do |pkg|
       describe package(pkg) do
         it { should be_installed }
