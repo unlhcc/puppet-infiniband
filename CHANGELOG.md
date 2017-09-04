@@ -4,6 +4,19 @@ Release notes for the treydock-infiniband module.
 
 ------------------------------------------
 
+#### 2017-09-04 Release 1.1.1
+
+This is a bugfix release as well as minor changes to unit tests
+
+* Fix custom facts to work with Facter 3 [\#7](https://github.com/treydock/puppet-infiniband/pull/7)
+* Fix has_infiniband fact to not produce errors when lspci is not installed
+* Remove management of libehca package as that package does exist for x86_64
+* Cleanup module metadata
+* Update unit test and development dependencies
+* Add acceptance testing for travis-ci
+
+------------------------------------------
+
 #### 2014-11-04 Release 1.1.0
 
 This is a backwards compatible feature release that adds support for
