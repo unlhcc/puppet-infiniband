@@ -29,6 +29,25 @@ describe Facter::Util::Infiniband do
     end
   end
 
+  describe 'count_ib_devices' do
+    it 'should return 1' do
+      Facter::Util::Resolution.expects(:which).with('lspci').returns(true)
+      Facter::Util::Infiniband.expects(:lspci).with().returns(my_fixture_read('mellanox_lspci_1'))
+      Facter::Util::Infiniband.count_ib_devices.should == 1
+    end
+
+    it 'should return 0' do
+      Facter::Util::Resolution.expects(:which).with('lspci').returns(true)
+      Facter::Util::Infiniband.expects(:lspci).with().returns(my_fixture_read('noib_lspci_1'))
+      Facter::Util::Infiniband.count_ib_devices.should == 0
+    end
+
+    it 'should return 0' do
+      Facter::Util::Resolution.expects(:which).with('lspci').returns(false)
+      Facter::Util::Infiniband.count_ib_devices.should == 0
+    end
+  end
+
   describe 'get_port_fw_version' do
     it 'should return fw_ver for mlx devices' do
       Facter::Util::Infiniband.expects(:read_sysfs).with("/sys/class/infiniband/mlx4_0/fw_ver").returns("2.9.1200")

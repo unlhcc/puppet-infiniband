@@ -18,11 +18,13 @@ class Facter::Util::Infiniband
   #
   # @api private
   def self.count_ib_devices
+    count = 0
     if Facter::Util::Resolution.which('lspci')
       output = self.lspci
       matches = output.scan(LSPCI_IB_REGEX)
-      matches.flatten.reject {|s| s.nil?}.length
+      count = matches.flatten.reject {|s| s.nil?}.length
     end
+    count
   end
 
   # Reads the contents of path in sysfs
