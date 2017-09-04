@@ -16,11 +16,6 @@ class infiniband::config {
   shellvar { 'infiniband NFSoRDMA_PORT': variable => 'NFSoRDMA_PORT', value => $infiniband::nfsordma_port }
 
   if $infiniband::manage_mlx4_core_options {
-    $real_log_num_mtt = $infiniband::log_num_mtt ? {
-      'UNSET' => calc_log_num_mtt($::memorysize_mb, $infiniband::log_mtts_per_seg),
-      default => $infiniband::log_num_mtt,
-    }
-
     file { '/etc/modprobe.d/mlx4_core.conf':
       ensure  => 'file',
       content => template('infiniband/modprobe.d/mlx4_core.conf.erb'),

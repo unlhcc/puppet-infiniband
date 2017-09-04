@@ -171,6 +171,7 @@ describe 'infiniband' do
           :operatingsystemrelease     => '6.6',
           :operatingsystemmajrelease  => '6',
           :has_infiniband             => 'true',
+          :memorysize_mb              => '64399.75',
         }
       end
 
@@ -202,6 +203,7 @@ describe 'infiniband' do
           :operatingsystemrelease     => '7.0.1406',
           :operatingsystemmajrelease  => '7',
           :has_infiniband             => 'true',
+          :memorysize_mb              => '64399.75',
         }
       end
 
@@ -310,8 +312,10 @@ describe 'infiniband' do
       let :facts do
         {
           :osfamily                   => 'RedHat',
+          :operatingsystemrelease     => '6.6',
           :operatingsystemmajrelease  => '6',
           :has_infiniband             => 'false',
+          :memorysize_mb              => '64399.75',
         }
       end
 

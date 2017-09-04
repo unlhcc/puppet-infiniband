@@ -17,12 +17,14 @@ describe Facter::Util::Infiniband do
 
   describe 'read_sysfs' do
     it 'should return output' do
-      Facter::Util::FileRead.expects(:read).with("/sys/class/infiniband/mlx4_0/fw_ver").returns("2.9.1200\n")
+      File.expects(:exist?).with('/sys/class/infiniband/mlx4_0/fw_ver').returns(true)
+      Facter::Util::Resolution.expects(:exec).with("cat /sys/class/infiniband/mlx4_0/fw_ver").returns("2.9.1200\n")
       Facter::Util::Infiniband.read_sysfs("/sys/class/infiniband/mlx4_0/fw_ver").should == "2.9.1200"
     end
 
     it 'should return nil' do
-      Facter::Util::FileRead.expects(:read).with("/sys/class/infiniband/mlx4_0/fw_ver").returns(nil)
+      File.expects(:exist?).with('/sys/class/infiniband/mlx4_0/fw_ver').returns(true)
+      Facter::Util::Resolution.expects(:exec).with("cat /sys/class/infiniband/mlx4_0/fw_ver").returns(nil)
       Facter::Util::Infiniband.read_sysfs("/sys/class/infiniband/mlx4_0/fw_ver").should == nil
     end
   end

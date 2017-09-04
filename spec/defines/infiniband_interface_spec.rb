@@ -6,6 +6,7 @@ describe 'infiniband::interface' do
       :osfamily                   => 'RedHat',
       :operatingsystemmajrelease  => '6',
       :has_infiniband             => 'true',
+      :memorysize_mb              => '64399.75',
     }
   end
 

@@ -49,6 +49,13 @@ class infiniband (
     }
   }
 
+  if $manage_mlx4_core_options {
+    $real_log_num_mtt = $log_num_mtt ? {
+      'UNSET' => calc_log_num_mtt($::memorysize_mb, $log_mtts_per_seg),
+      default => $log_num_mtt,
+    }
+  }
+
   include '::infiniband::install'
   include '::infiniband::config'
   include '::infiniband::service'
@@ -57,11 +64,11 @@ class infiniband (
   anchor { 'infiniband::start': }
   anchor { 'infiniband::end': }
 
-  Anchor['infiniband::start']->
-  Class['infiniband::install']->
-  Class['infiniband::config']->
-  Class['infiniband::service']->
-  Class['infiniband::providers']->
-  Anchor['infiniband::end']
+  Anchor['infiniband::start']
+  -> Class['infiniband::install']
+  -> Class['infiniband::config']
+  -> Class['infiniband::service']
+  -> Class['infiniband::providers']
+  -> Anchor['infiniband::end']
 
 }
