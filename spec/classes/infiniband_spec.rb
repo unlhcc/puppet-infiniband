@@ -14,6 +14,26 @@ end
 
 def base_packages
   {
+    'el7.4' => [
+      'dapl',
+      'ibacm',
+      'ibutils',
+      'infiniband-diags',
+      'iwpmd',
+      'libibcm',
+      'libibmad',
+      'libibumad',
+      'libibverbs',
+      'libibverbs-utils',
+      'librdmacm',
+      'librdmacm-utils',
+      'mstflint',
+      'opa-address-resolution',
+      'opa-fastfabric',
+      'perftest',
+      'qperf',
+      'srp_daemon',
+    ],
     'el7' => [
       'dapl',
       'ibacm',
@@ -80,6 +100,15 @@ end
 
 def optional_packages
   {
+    'el7.4' => [
+      'compat-dapl',
+      'compat-opensm-libs',
+      'libibcommon',
+      'libusnic_verbs',
+      'libvma',
+      'rdma-core',
+      'usnic-tools',
+    ],
     'el7' => [
       'compat-dapl',
       'infiniband-diags',
@@ -223,6 +252,38 @@ describe 'infiniband' do
         it { should have_package_resource_count(base_packages['el7'].size) }
 
         optional_packages['el7'].each do |optional_package|
+          it { should_not contain_package(optional_package) }
+        end
+      end
+    end
+
+    context 'operatingsystemrelease => 7.4' do
+      let :facts do
+        {
+          :osfamily                   => 'RedHat',
+          :operatingsystemrelease     => '7.4.1708',
+          :operatingsystemmajrelease  => '7',
+          :has_infiniband             => 'true',
+          :memorysize_mb              => '64399.75',
+        }
+      end
+
+      it { should have_package_resource_count(base_packages['el7.4'].size + optional_packages['el7.4'].size) }
+
+      base_packages['el7.4'].each do |package|
+        it { should contain_package(package).with_ensure('present') }
+      end
+
+      optional_packages['el7.4'].each do |optional_package|
+        it { should contain_package(optional_package).with_ensure('present') }
+      end
+
+      context 'with_optional_packages => false' do
+        let(:params) {{ :with_optional_packages => false }}
+
+        it { should have_package_resource_count(base_packages['el7.4'].size) }
+
+        optional_packages['el7.4'].each do |optional_package|
           it { should_not contain_package(optional_package) }
         end
       end
