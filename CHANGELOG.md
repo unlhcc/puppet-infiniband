@@ -4,6 +4,15 @@ Release notes for the treydock-infiniband module.
 
 ------------------------------------------
 
+#### [1.2.0](https://github.com/treydock/puppet-infiniband/tree/1.2.0) (2017-10-10)
+[Full Changelog](https://github.com/treydock/puppet-infiniband/compare/1.1.1...1.2.0)
+
+**Merged pull requests:**
+
+- Adds support for EL-7.4. [\#11](https://github.com/treydock/puppet-infiniband/pull/11) ([mrolli](https://github.com/mrolli))
+
+------------------------------------------
+
 #### 2017-09-04 Release 1.1.1
 
 This is a bugfix release as well as minor changes to unit tests
