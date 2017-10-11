@@ -8,10 +8,11 @@ define infiniband::interface(
   $ensure         = 'present',
   $enable         = true,
   $connected_mode = 'yes',
-  $mtu            = 'UNSET'
+  $mtu            = 'UNSET',
+  $notify_service = true,
 ) {
 
-  include network
+  $ifcfg_filepath = "/etc/sysconfig/network-scripts/ifcfg-${name}"
 
   validate_re($ensure, ['^present$','^absent$'])
 
@@ -21,6 +22,11 @@ define infiniband::interface(
   }
   validate_bool($enable_real)
 
+  $notify_service_real = is_string($notify_service) ? {
+    true  => str2bool($notify_service),
+    false => $notify_service
+  }
+
   validate_re($connected_mode, ['^yes$','^no$'])
 
   if $enable_real {
@@ -29,13 +35,18 @@ define infiniband::interface(
     $onboot = 'no'
   }
 
-  file { "/etc/sysconfig/network-scripts/ifcfg-${name}":
+  file { $ifcfg_filepath:
     ensure  => $ensure,
     content => template('infiniband/ifcfg.erb'),
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    notify  => Service['network'],
+  }
+
+  # Notify the network service if requested to do so
+  if $notify_service_real {
+    include network
+    File[$ifcfg_filepath] ~> Service['network']
   }
 
 }

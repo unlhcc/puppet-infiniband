@@ -13,7 +13,7 @@ describe 'infiniband::interface' do
   let :title do
     'ib0'
   end
-  
+
   let :default_params do
     {
       :ipaddr   => '192.168.1.1',
@@ -33,13 +33,13 @@ describe 'infiniband::interface' do
       'owner'   => 'root',
       'group'   => 'root',
       'mode'    => '0644',
-      'notify'  => 'Service[network]',
     })
   end
 
   it do
     should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0') \
-      .with_content(my_fixture_read('ifcfg-ib0_with_connected_mode'))
+      .with_content(my_fixture_read('ifcfg-ib0_with_connected_mode')) \
+      .that_notifies('Service[network]')
   end
 
   context 'ensure => absent' do
@@ -80,6 +80,15 @@ describe 'infiniband::interface' do
     end
 
     it { should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with_content(my_fixture_read('ifcfg-ib0_with_gateway')) }
+  end
+
+  context 'notify_service => false' do
+    let :params do
+      default_params.merge({:notify_service => 'false'})
+    end
+
+    it { should_not contain_class('network') }
+    it { should_not contain_service('network') }
   end
 end
 
