@@ -2,37 +2,24 @@
 #
 # See README.md for more details.
 define infiniband::interface(
-  $ipaddr,
-  $netmask,
-  $gateway        = 'UNSET',
-  $ensure         = 'present',
-  $enable         = true,
-  $connected_mode = 'yes',
-  $mtu            = 'UNSET',
-  $notify_service = true,
+  Stdlib::Compat::Ip_address $ipaddr,
+  Stdlib::Compat::Ip_address $netmask,
+  Optional[Stdlib::Compat::Ip_address] $gateway = undef,
+  Enum['present', 'absent'] $ensure             = 'present',
+  Variant[Enum['yes', 'no'], Boolean] $enable   = true,
+  Enum['yes', 'no'] $connected_mode             = 'yes',
+  Optional[Integer] $mtu                        = undef,
+  Boolean $notify_service                       = true,
 ) {
 
   $ifcfg_filepath = "/etc/sysconfig/network-scripts/ifcfg-${name}"
 
-  validate_re($ensure, ['^present$','^absent$'])
-
-  $enable_real = is_string($enable) ? {
-    true  => str2bool($enable),
-    false => $enable,
-  }
-  validate_bool($enable_real)
-
-  $notify_service_real = is_string($notify_service) ? {
-    true  => str2bool($notify_service),
-    false => $notify_service
-  }
-
-  validate_re($connected_mode, ['^yes$','^no$'])
-
-  if $enable_real {
-    $onboot = 'yes'
-  } else {
-    $onboot = 'no'
+  $onboot = $enable ? {
+    String  => $enable,
+    Boolean => $enable ? {
+      true  => 'yes',
+      false => 'no',
+    },
   }
 
   file { $ifcfg_filepath:
@@ -44,7 +31,7 @@ define infiniband::interface(
   }
 
   # Notify the network service if requested to do so
-  if $notify_service_real {
+  if $notify_service {
     include network
     File[$ifcfg_filepath] ~> Service['network']
   }

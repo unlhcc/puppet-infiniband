@@ -47,9 +47,9 @@ Define a IBoIP interface
 
 ##### `packages`
 
-The packges to install infiniband support.  Default is 'UNSET'.
+The packges to install infiniband support.  Default is undef.
 
-If 'UNSET' the entire set of Infiniband Support packages will be installed.
+If undef the entire set of Infiniband Support packages will be installed.
 
 ##### `with_optional_packages`
 
@@ -125,7 +125,7 @@ Sets the `NFSoRDMA_LOAD` setting for the RDMA service (defaults to 'yes').
 
 ##### `nfsordma_port`
 
-Sets the `NFSoRDMA_PORT` setting for the RDMA service (defaults to '2050').
+Sets the `NFSoRDMA_PORT` setting for the RDMA service (defaults to 2050).
 
 ##### `manage_mlx4_core_options`
 
@@ -133,13 +133,13 @@ Boolean that determines if '/etc/modprobe.d/mlx4_core.conf' should be managed (d
 
 ##### `log_num_mtt`
 
-Sets the mlx4_core module's 'log_num_mtt' value.  Defaults to 'UNSET'.
+Sets the mlx4_core module's 'log_num_mtt' value.  Defaults to undef.
 
-When the value is 'UNSET' the value is determined using the `calc_log_num_mtt` parser function.
+When the value is undef the value is determined using the `calc_log_num_mtt` parser function.
 
 ##### `log_mtts_per_seg`
 
-Sets the mlx4_core module's 'log_mtts_per_seq' value.  Defaults to '3'.
+Sets the mlx4\_core module's 'log_mtts_per_seq' value.  Defaults to 3.
 
 ##### `interfaces`
 
@@ -170,7 +170,7 @@ String: required, no default.  The NETMASK for the infiniband interface.
 
 ##### `gateway`
 
-String: defaults to 'UNSET'.  The GATEWAY for the infiniband interface.
+String: defaults to undef.  The GATEWAY for the infiniband interface.
 
 ##### `ensure`
 
@@ -183,6 +183,10 @@ Boolean: defaults to true.  Sets if the infiniband::interface should be enabled.
 ##### `connected_mode`
 
 String: defaults to 'yes'.  The CONNECTED_MODE for the infiniband interface.
+
+##### `mtu`
+
+String: defaults to undef. The MTU for the infiniband interface.
 
 ##### `notify_service`
 
