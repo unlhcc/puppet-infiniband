@@ -369,6 +369,32 @@ describe 'infiniband' do
       })
     end
 
+    context "has_infiniband is boolean true" do
+      let :facts do
+        {
+          :osfamily                   => 'RedHat',
+          :operatingsystemrelease     => '6.6',
+          :operatingsystemmajrelease  => '6',
+          :has_infiniband             => true,
+          :memorysize_mb              => '64399.75',
+        }
+      end
+
+      it do
+        should contain_service('rdma').with({
+          'ensure'      => 'running',
+          'enable'      => 'true',
+        })
+      end
+
+      it do
+        should contain_service('ibacm').with({
+          'ensure'      => 'running',
+          'enable'      => 'true',
+        })
+      end
+    end
+
     context "has_infiniband is false" do
       let :facts do
         {
