@@ -45,103 +45,103 @@ Define a IBoIP interface
 
 #### infiniband
 
-#####`packages`
+##### `packages`
 
 The packges to install infiniband support.  Default is 'UNSET'.
 
 If 'UNSET' the entire set of Infiniband Support packages will be installed.
 
-#####`with_optional_packages`
+##### `with_optional_packages`
 
 If true, the packages in `optional_packages` are installed (defaults to true).
 
-#####`rdma_service_ensure`
+##### `rdma_service_ensure`
 
 RDMA service ensure parameter.  Default to 'running' if `has_infiniband` fact is 'true', and 'stopped' if 'has_infiniband' fact is 'false'.
 
-#####`rdma_service_enable`
+##### `rdma_service_enable`
 
 RDMA service enable parameter.  Default to true if `has_infiniband` fact is 'true', and false if 'has_infiniband' fact is 'false'.
 
-#####`rdma_service_name`
+##### `rdma_service_name`
 
 RDMA service name (defaults to 'rdma').
 
-#####`rdma_service_has_status`
+##### `rdma_service_has_status`
 
 RDMA service has_status parameter (defaults to true).
 
-#####`rdma_service_has_restart`
+##### `rdma_service_has_restart`
 
 RDMA service has_restart parameter (defaults to true).
 
-#####`ibacm_service_ensure`
+##### `ibacm_service_ensure`
 
 ibacm service ensure parameter.  Default to 'running' if `has_infiniband` fact is 'true', and 'stopped' if 'has_infiniband' fact is 'false'.
 
-#####`ibacm_service_enable`
+##### `ibacm_service_enable`
 
 ibacm service enable parameter.  Default to true if `has_infiniband` fact is 'true', and false if 'has_infiniband' fact is 'false'.
 
-#####`ibacm_service_name`
+##### `ibacm_service_name`
 
 ibacm service name (defaults to 'ibacm').
 
-#####`ibacm_service_has_status`
+##### `ibacm_service_has_status`
 
 ibacm service has_status parameter (defaults to true).
 
-#####`ibacm_service_has_restart`
+##### `ibacm_service_has_restart`
 
 ibacm service has_restart parameter (defaults to true).
 
-#####`rdma_conf_path`
+##### `rdma_conf_path`
 
 The RDMA service configuration path (defaults to '/etc/rdma/rdma.conf').
 
-#####`ipoib_load`
+##### `ipoib_load`
 
 Sets the `IPOIB_LOAD` setting for the RDMA service (defaults to 'yes').
 
-#####`srp_load`
+##### `srp_load`
 
 Sets the `SRP_LOAD` setting for the RDMA service (defaults to 'no').
 
-#####`iser_load`
+##### `iser_load`
 
 Sets the `ISER_LOAD` setting for the RDMA service (defaults to 'no').
 
-#####`rds_load`
+##### `rds_load`
 
 Sets the `RDS_LOAD` setting for the RDMA service (defaults to 'no').
 
-#####`fixup_mtrr_regs`
+##### `fixup_mtrr_regs`
 
 Sets the `FIXUP_MTRR_REGS` setting for the RDMA service (defaults to 'no').
 
-#####`nfsordma_load`
+##### `nfsordma_load`
 
 Sets the `NFSoRDMA_LOAD` setting for the RDMA service (defaults to 'yes').
 
-#####`nfsordma_port`
+##### `nfsordma_port`
 
 Sets the `NFSoRDMA_PORT` setting for the RDMA service (defaults to '2050').
 
-#####`manage_mlx4_core_options`
+##### `manage_mlx4_core_options`
 
 Boolean that determines if '/etc/modprobe.d/mlx4_core.conf' should be managed (defaults to true).
 
-#####`log_num_mtt`
+##### `log_num_mtt`
 
 Sets the mlx4_core module's 'log_num_mtt' value.  Defaults to 'UNSET'.
 
 When the value is 'UNSET' the value is determined using the `calc_log_num_mtt` parser function.
 
-#####`log_mtts_per_seg`
+##### `log_mtts_per_seg`
 
 Sets the mlx4_core module's 'log_mtts_per_seq' value.  Defaults to '3'.
 
-#####`interfaces`
+##### `interfaces`
 
 This Hash can be used to define `infiniband::interface` resources (defaults to an empty Hash).
 
@@ -156,38 +156,38 @@ Creates the ifcfg file for an IBoIP interface
       netmask => '255.255.255.0',
     }
 
-#####`name`
+##### `name`
 
 String: the resource title.  Sets the interfaces name, for example 'ib0'.
 
-#####`ipaddr`
+##### `ipaddr`
 
 String: required, no default.  The IPADDR for the infiniband interface.
 
-#####`netmask`
+##### `netmask`
 
 String: required, no default.  The NETMASK for the infiniband interface.
 
-#####`gateway`
+##### `gateway`
 
 String: defaults to 'UNSET'.  The GATEWAY for the infiniband interface.
 
-#####`ensure`
+##### `ensure`
 
 String: defaults to 'present'.  Sets if the infiniband::interface should be present or absent.
 
-#####`enable`
+##### `enable`
 
 Boolean: defaults to true.  Sets if the infiniband::interface should be enabled.
 
-#####`connected_mode`
+##### `connected_mode`
 
 String: defaults to 'yes'.  The CONNECTED_MODE for the infiniband interface.
 
-#####`notify_service`
+##### `notify_service`
 
 Boolean: defaults to true. By default the network service gets notified and therefore restarted
-when one or more interfaces are created, chagned or removed. If set to false, the changes
+when one or more interfaces are created, changed or removed. If set to false, the changes
 to the config files is done without notifying the network service, which then can/must be done
 manually at a later point.
 Setting this to false also enables to use another module for handling the network service.
