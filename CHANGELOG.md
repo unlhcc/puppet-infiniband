@@ -4,6 +4,14 @@ Release notes for the treydock-infiniband module.
 
 ------------------------------------------
 
+#### [1.3.0](https://github.com/treydock/puppet-infiniband/tree/1.3.0) (2017-11-09)
+[Full Changelog](https://github.com/treydock/puppet-infiniband/compare/1.2.0...1.3.0)
+
+**Merged pull requests:**
+
+- Test for "true" and true [\#13](https://github.com/treydock/puppet-infiniband/pull/13) ([mrolli](https://github.com/mrolli))
+- Adds possibility to omit network service restarts. [\#12](https://github.com/treydock/puppet-infiniband/pull/12) ([mrolli](https://github.com/mrolli))
+
 #### [1.2.0](https://github.com/treydock/puppet-infiniband/tree/1.2.0) (2017-10-10)
 [Full Changelog](https://github.com/treydock/puppet-infiniband/compare/1.1.1...1.2.0)
 
