@@ -146,7 +146,7 @@ describe 'infiniband' do
       :osfamily                   => 'RedHat',
       :operatingsystemrelease     => '6.5',
       :operatingsystemmajrelease  => '6',
-      :has_infiniband             => 'true',
+      :has_infiniband             => true,
       :memorysize_mb              => '64399.75',
     }
   end
@@ -263,7 +263,7 @@ describe 'infiniband' do
           :osfamily                   => 'RedHat',
           :operatingsystemrelease     => '7.4.1708',
           :operatingsystemmajrelease  => '7',
-          :has_infiniband             => 'true',
+          :has_infiniband             => true,
           :memorysize_mb              => '64399.75',
         }
       end
@@ -321,7 +321,7 @@ describe 'infiniband' do
     end
 
     context 'when log_num_mtt => 26' do
-      let(:params) {{ :manage_mlx4_core_options => true, :log_num_mtt => '26' }}
+      let(:params) {{ :manage_mlx4_core_options => true, :log_num_mtt => 26 }}
 
       it do
         verify_contents(catalogue, '/etc/modprobe.d/mlx4_core.conf', [
@@ -331,7 +331,7 @@ describe 'infiniband' do
     end
 
     context 'when log_mtts_per_seg => 1' do
-      let(:params) {{ :manage_mlx4_core_options => true, :log_mtts_per_seg => '1' }}
+      let(:params) {{ :manage_mlx4_core_options => true, :log_mtts_per_seg => 1 }}
 
       it do
         verify_contents(catalogue, '/etc/modprobe.d/mlx4_core.conf', [
@@ -401,7 +401,7 @@ describe 'infiniband' do
           :osfamily                   => 'RedHat',
           :operatingsystemrelease     => '6.6',
           :operatingsystemmajrelease  => '6',
-          :has_infiniband             => 'false',
+          :has_infiniband             => false,
           :memorysize_mb              => '64399.75',
         }
       end
@@ -436,42 +436,6 @@ describe 'infiniband' do
           'netmask' => '255.255.255.0',
         })
       end
-    end
-  end
-
-  # Test validate_bool parameters
-  [
-    'with_optional_packages',
-    'manage_mlx4_core_options',
-  ].each do |param|
-    context "with #{param} => 'foo'" do
-      let(:params) {{ param => 'foo' }}
-      it { expect { should create_class('infiniband') }.to raise_error(Puppet::Error, /is not a boolean/) }
-    end
-  end
-
-  # Test validate_re parameters
-  [
-    'ipoib_load',
-    'srp_load',
-    'iser_load',
-    'rds_load',
-    'fixup_mtrr_regs',
-    'nfsordma_load',
-  ].each do |p|
-    context "when #{p} => 'foo'" do
-      let(:params) {{ p.to_sym => 'foo' }}
-      it { expect { should create_class('infiniband') }.to raise_error(Puppet::Error, /does not match \["\^yes\$", "\^no\$"\]/) }
-    end
-  end
-
-  # Test validate_hash parameters
-  [
-    'interfaces',
-  ].each do |p|
-    context "when #{p} => 'foo'" do
-      let(:params) {{ p.to_sym => 'foo' }}
-      it { expect { should create_class('infiniband') }.to raise_error(Puppet::Error, /is not a Hash/) }
     end
   end
 end

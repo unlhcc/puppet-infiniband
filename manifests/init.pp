@@ -2,45 +2,33 @@
 #
 # See README.md for more details.
 class infiniband (
-  $packages                     = 'UNSET',
-  $with_optional_packages       = true,
-  $rdma_service_ensure          = $infiniband::params::service_ensure,
-  $rdma_service_enable          = $infiniband::params::service_enable,
-  $rdma_service_name            = $infiniband::params::rdma_service_name,
-  $rdma_service_has_status      = $infiniband::params::rdma_service_has_status,
-  $rdma_service_has_restart     = $infiniband::params::rdma_service_has_restart,
-  $ibacm_service_ensure         = $infiniband::params::service_ensure,
-  $ibacm_service_enable         = $infiniband::params::service_enable,
-  $ibacm_service_name           = $infiniband::params::ibacm_service_name,
-  $ibacm_service_has_status     = $infiniband::params::ibacm_service_has_status,
-  $ibacm_service_has_restart    = $infiniband::params::ibacm_service_has_restart,
-  $rdma_conf_path               = $infiniband::params::rdma_conf_path,
-  $ipoib_load                   = 'yes',
-  $srp_load                     = 'no',
-  $iser_load                    = 'no',
-  $rds_load                     = 'no',
-  $fixup_mtrr_regs              = 'no',
-  $nfsordma_load                = 'yes',
-  $nfsordma_port                = 2050,
-  $manage_mlx4_core_options     = true,
-  $log_num_mtt                  = 'UNSET',
-  $log_mtts_per_seg             = '3',
-  $interfaces                   = {},
+  Optional[Array] $packages             = undef,
+  Boolean $with_optional_packages       = true,
+  String $rdma_service_ensure           = $infiniband::params::service_ensure,
+  Boolean $rdma_service_enable          = $infiniband::params::service_enable,
+  String $rdma_service_name             = $infiniband::params::rdma_service_name,
+  Boolean $rdma_service_has_status      = $infiniband::params::rdma_service_has_status,
+  Boolean $rdma_service_has_restart     = $infiniband::params::rdma_service_has_restart,
+  String $ibacm_service_ensure          = $infiniband::params::service_ensure,
+  Boolean $ibacm_service_enable         = $infiniband::params::service_enable,
+  String $ibacm_service_name            = $infiniband::params::ibacm_service_name,
+  Boolean $ibacm_service_has_status     = $infiniband::params::ibacm_service_has_status,
+  Boolean $ibacm_service_has_restart    = $infiniband::params::ibacm_service_has_restart,
+  Stdlib::Absolutepath $rdma_conf_path  = $infiniband::params::rdma_conf_path,
+  Enum['yes', 'no'] $ipoib_load         = 'yes',
+  Enum['yes', 'no'] $srp_load           = 'no',
+  Enum['yes', 'no'] $iser_load          = 'no',
+  Enum['yes', 'no'] $rds_load           = 'no',
+  Enum['yes', 'no'] $fixup_mtrr_regs    = 'no',
+  Enum['yes', 'no'] $nfsordma_load      = 'yes',
+  Integer[0, 65535] $nfsordma_port      = 2050,
+  Boolean $manage_mlx4_core_options     = true,
+  Optional[Integer] $log_num_mtt        = undef,
+  Integer $log_mtts_per_seg             = 3,
+  Hash $interfaces                      = {},
 ) inherits infiniband::params {
 
-  validate_bool($with_optional_packages)
-  validate_re($ipoib_load, ['^yes$', '^no$'])
-  validate_re($srp_load, ['^yes$', '^no$'])
-  validate_re($iser_load, ['^yes$', '^no$'])
-  validate_re($rds_load, ['^yes$', '^no$'])
-  validate_re($fixup_mtrr_regs, ['^yes$', '^no$'])
-  validate_re($nfsordma_load, ['^yes$', '^no$'])
-  validate_bool($manage_mlx4_core_options)
-  validate_hash($interfaces)
-
-  if $packages != 'UNSET' {
-    validate_array($packages)
-
+  if $packages {
     $support_packages = $packages
   } else {
     $support_packages = $with_optional_packages ? {
@@ -51,7 +39,7 @@ class infiniband (
 
   if $manage_mlx4_core_options {
     $real_log_num_mtt = $log_num_mtt ? {
-      'UNSET' => calc_log_num_mtt($::memorysize_mb, $log_mtts_per_seg),
+      Undef   => calc_log_num_mtt($::memorysize_mb, $log_mtts_per_seg),
       default => $log_num_mtt,
     }
   }

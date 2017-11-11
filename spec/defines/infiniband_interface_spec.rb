@@ -58,6 +58,14 @@ describe 'infiniband::interface' do
     it { should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with_content(my_fixture_read('ifcfg-ib0_with_onboot_no')) }
   end
 
+  context 'enable => false' do
+    let :params do
+      default_params.merge({:enable => false})
+    end
+
+    it { should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with_content(my_fixture_read('ifcfg-ib0_with_onboot_no')) }
+  end
+
   context 'connected_mode => no' do
     let :params do
       default_params.merge({:connected_mode => 'no'})
@@ -68,7 +76,7 @@ describe 'infiniband::interface' do
 
   context 'mtu => 65520' do
     let :params do
-      default_params.merge({:mtu => '65520'})
+      default_params.merge({:mtu => 65520})
     end
 
     it { should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0'). with_content(my_fixture_read('ifcfg-ib0_with_mtu')) }
@@ -84,7 +92,7 @@ describe 'infiniband::interface' do
 
   context 'notify_service => false' do
     let :params do
-      default_params.merge({:notify_service => 'false'})
+      default_params.merge({:notify_service => false})
     end
 
     it { should_not contain_class('network') }

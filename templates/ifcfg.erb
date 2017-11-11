@@ -5,10 +5,10 @@ ONBOOT="<%= @onboot %>"
 TYPE="InfiniBand"
 IPADDR="<%= @ipaddr %>"
 NETMASK="<%= @netmask %>"
-<% if @gateway != 'UNSET' -%>
+<% if @gateway -%>
 GATEWAY="<%= @gateway %>"
 <% end -%>
 CONNECTED_MODE="<%= @connected_mode %>"
-<% if @mtu != 'UNSET' -%>
+<% if @mtu -%>
 MTU="<%= @mtu %>"
 <% end -%>

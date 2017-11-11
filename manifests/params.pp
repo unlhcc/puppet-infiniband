@@ -149,16 +149,10 @@ class infiniband::params {
 
   # Set default service states based on has_infiniband fact value
   case $::has_infiniband {
-    /true/ : {
-      $service_ensure = 'running'
-      $service_enable = true
-    }
-
     true : {
       $service_ensure = 'running'
       $service_enable = true
     }
-
     default : {
       $service_ensure = 'stopped'
       $service_enable = false
