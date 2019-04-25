@@ -94,4 +94,50 @@ class Facter::Util::Infiniband
     rate = self.read_sysfs(rate_sysfs_path)
     rate
   end
+
+  # Returns array of HCAs on the system
+  #
+  # @return [Array]
+  #
+  # @api private
+  def self.get_hcas
+    hcas = []
+    if File.directory?('/sys/class/infiniband')
+      Dir.glob('/sys/class/infiniband/*').each do |dir|
+        hca = File.basename(dir)
+        hcas << hca
+      end
+    end
+    hcas
+  end
+
+  # Returns hash of HCA ports and their GUIDs
+  #
+  # @return [Hash]
+  #
+  # @api private
+  def self.get_hca_port_guids(hca)
+    port_guids = {}
+    if ! Facter::Util::Resolution.which('ibstat')
+      return {}
+    end
+    output = Facter::Util::Resolution.exec("ibstat -p #{hca}")
+    output.each_line.with_index do |line, index|
+      guid = line.strip()
+      port = index + 1
+      port_guids[port.to_s] = guid
+    end
+    port_guids
+  end
+
+  # Returns HCA board ID
+  #
+  # @return [String]
+  #
+  # @api private
+  def self.get_hca_board_id(hca)
+    sysfs_path = File.join("/sys/class/infiniband", hca, "board_id")
+    board_id = self.read_sysfs(sysfs_path)
+    board_id
+  end
 end

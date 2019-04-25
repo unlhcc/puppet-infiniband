@@ -12,7 +12,6 @@
 require 'facter/util/infiniband'
 
 Facter.add(:infiniband_rate) do
-  confine :kernel => "Linux"
   confine :has_infiniband => true
   ports = Facter::Util::Infiniband.get_ports
   if ! ports.empty?
