@@ -1,5 +1,8 @@
 # == Class: infiniband::install
 #
 class infiniband::install {
-  ensure_packages($infiniband::support_packages)
+  yum::group { 'infiniband':
+    ensure => 'present',
+  }
+  ensure_packages($infiniband::extra_packages)
 }
