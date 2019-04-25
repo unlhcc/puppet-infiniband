@@ -112,4 +112,42 @@ describe Facter::Util::Infiniband do
       expect(described_class.get_port_rate("mlx4_0")).to be_nil
     end
   end
+
+  describe 'get_hcas' do
+    it 'should return HCAs' do
+      allow(File).to receive(:directory?).with('/sys/class/infiniband').and_return(true)
+      allow(Dir).to receive(:glob).with('/sys/class/infiniband/*').and_return(['/sys/class/infiniband/mlx5_0', '/sys/class/infiniband/mlx5_1'])
+      expect(described_class.get_hcas).to eq(['mlx5_0','mlx5_1'])
+    end
+
+    it 'should not return HCAs with no infiniband' do
+      allow(File).to receive(:directory?).with('/sys/class/infiniband').and_return(false)
+      expect(described_class.get_hcas).to eq([])
+    end
+  end
+
+  describe 'get_hca_port_guids' do
+    it 'should return port GUIDs' do
+      allow(Facter::Util::Resolution).to receive(:which).with('ibstat').and_return('/usr/sbin/ibstat')
+      allow(Facter::Util::Resolution).to receive(:exec).with('ibstat -p mlx5_0').and_return("0x0202c9fffe557aae\n0x0202c9fffe557aaf\n")
+      expect(described_class.get_hca_port_guids('mlx5_0')).to eq({'1' => '0x0202c9fffe557aae', '2' => '0x0202c9fffe557aaf'})
+    end
+
+    it 'should return nothing without ibstat' do
+      allow(Facter::Util::Resolution).to receive(:which).with('ibstat').and_return(nil)
+      expect(Facter::Util::Resolution).not_to receive(:exec)
+      expect(described_class.get_hca_port_guids('mlx5_0')).to eq({})
+    end
+  end
+
+  describe 'get_hca_board_id' do
+    it 'should return value' do
+      allow(described_class).to receive(:read_sysfs).with('/sys/class/infiniband/mlx5_0/board_id').and_return('foo')
+      expect(described_class.get_hca_board_id('mlx5_0')).to eq('foo')
+    end
+    it 'should return nil' do
+      allow(described_class).to receive(:read_sysfs).with('/sys/class/infiniband/mlx5_0/board_id').and_return(nil)
+      expect(described_class.get_hca_board_id('mlx5_0')).to be_nil
+    end
+  end
 end
