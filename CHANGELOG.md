@@ -4,6 +4,19 @@ Release notes for the treydock-infiniband module.
 
 ------------------------------------------
 
+## [3.0.0](https://github.com/treydock/puppet-infiniband/tree/3.0.0) (2019-04-26)
+[Full Changelog](https://github.com/treydock/puppet-infiniband/compare/2.0.0...3.0.0)
+
+**Implemented enhancements:**
+
+- BREAKING: Use example42/network module for infiniband interfaces [\#19](https://github.com/treydock/puppet-infiniband/pull/19) ([treydock](https://github.com/treydock))
+- BREAKING: Install packages via yum package group [\#17](https://github.com/treydock/puppet-infiniband/pull/17) ([treydock](https://github.com/treydock))
+- Add HCA facts [\#15](https://github.com/treydock/puppet-infiniband/pull/15) ([treydock](https://github.com/treydock))
+
+**Merged pull requests:**
+
+- Support only Puppet 5 and 6 and update module dependency ranges [\#18](https://github.com/treydock/puppet-infiniband/pull/18) ([treydock](https://github.com/treydock))
+
 ## [2.0.0](https://github.com/treydock/puppet-infiniband/tree/2.0.0) (2017-11-11)
 [Full Changelog](https://github.com/treydock/puppet-infiniband/compare/1.3.0...2.0.0)
 

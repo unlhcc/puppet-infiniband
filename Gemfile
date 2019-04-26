@@ -15,6 +15,8 @@ group :development, :test do
   gem 'puppet-syntax',            :require => false
   gem 'simplecov',                :require => false
   gem 'json_pure', '~>1.x',       :require => false
+  gem 'puppet-strings',           :require => false
+  gem 'github_changelog_generator', :require => false
 end
 
 group :system_tests do
@@ -33,4 +35,4 @@ else
   gem 'facter', :require => false
 end
 
-gem 'puppet', ENV['PUPPET_GEM_VERSION'] || '~> 4.x', :require => false
+gem 'puppet', ENV['PUPPET_GEM_VERSION'] || '~> 5.x', :require => false
