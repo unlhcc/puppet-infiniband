@@ -188,14 +188,6 @@ String: defaults to 'yes'.  The CONNECTED_MODE for the infiniband interface.
 
 String: defaults to undef. The MTU for the infiniband interface.
 
-##### `notify_service`
-
-Boolean: defaults to true. By default the network service gets notified and therefore restarted
-when one or more interfaces are created, changed or removed. If set to false, the changes
-to the config files is done without notifying the network service, which then can/must be done
-manually at a later point.
-Setting this to false also enables to use another module for handling the network service.
-
 ### Facts
 
 #### has_infiniband

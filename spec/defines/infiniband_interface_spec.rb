@@ -38,8 +38,7 @@ describe 'infiniband::interface' do
 
       it do
         should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0') \
-          .with_content(my_fixture_read('ifcfg-ib0_with_connected_mode')) \
-          .that_notifies('Service[network]')
+          .with_content(my_fixture_read('ifcfg-ib0_with_connected_mode'))
       end
 
       context 'ensure => absent' do
@@ -48,14 +47,6 @@ describe 'infiniband::interface' do
         end
 
         it { should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with_ensure('absent') }
-      end
-
-      context 'enable => no' do
-        let :params do
-          default_params.merge({:enable => 'no'})
-        end
-
-        it { should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with_content(my_fixture_read('ifcfg-ib0_with_onboot_no')) }
       end
 
       context 'enable => false' do
@@ -88,15 +79,6 @@ describe 'infiniband::interface' do
         end
 
         it { should contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with_content(my_fixture_read('ifcfg-ib0_with_gateway')) }
-      end
-
-      context 'notify_service => false' do
-        let :params do
-          default_params.merge({:notify_service => false})
-        end
-
-        it { should_not contain_class('network') }
-        it { should_not contain_service('network') }
       end
     end
   end

@@ -1,18 +1,15 @@
 # == Define: infiniband::interface
 #
 # See README.md for more details.
-define infiniband::interface(
+define infiniband::interface (
   Stdlib::Compat::Ip_address $ipaddr,
   Stdlib::Compat::Ip_address $netmask,
   Optional[Stdlib::Compat::Ip_address] $gateway = undef,
   Enum['present', 'absent'] $ensure             = 'present',
-  Variant[Enum['yes', 'no'], Boolean] $enable   = true,
-  Enum['yes', 'no'] $connected_mode             = 'yes',
+  Boolean $enable                               = true,
+  Enum['yes', 'no'] $connected_mode = 'yes',
   Optional[Integer] $mtu                        = undef,
-  Boolean $notify_service                       = true,
 ) {
-
-  $ifcfg_filepath = "/etc/sysconfig/network-scripts/ifcfg-${name}"
 
   $onboot = $enable ? {
     String  => $enable,
@@ -22,18 +19,21 @@ define infiniband::interface(
     },
   }
 
-  file { $ifcfg_filepath:
-    ensure  => $ensure,
-    content => template('infiniband/ifcfg.erb'),
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
+  $options_extra_redhat = {
+    'CONNECTED_MODE' => $connected_mode,
   }
 
-  # Notify the network service if requested to do so
-  if $notify_service {
-    include network
-    File[$ifcfg_filepath] ~> Service['network']
+  network::interface { $name:
+    ensure               => $ensure,
+    enable               => $enable,
+    onboot               => $onboot,
+    type                 => 'InfiniBand',
+    ipaddress            => $ipaddr,
+    netmask              => $netmask,
+    gateway              => $gateway,
+    nm_controlled        => 'no',
+    mtu                  => $mtu,
+    options_extra_redhat => $options_extra_redhat,
   }
 
 }

@@ -8,8 +8,7 @@ fixtures:
     augeasproviders_shellvar:
       repo: git://github.com/hercules-team/augeasproviders_shellvar.git
     network:
-      repo: git://github.com/razorsedge/puppet-network.git
-      ref: 3.2.0
+      repo: https://github.com/example42/puppet-network.git
     yum:
       repo: https://github.com/voxpupuli/puppet-yum.git
   symlinks:
