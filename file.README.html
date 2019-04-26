@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.9.19
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="file_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'>
+<h1 id="label-puppet-infiniband">puppet-infiniband</h1>
+
+<p><a href="https://forge.puppetlabs.com/treydock/infiniband"><img
+src="http://img.shields.io/puppetforge/v/treydock/infiniband.svg"></a> <a
+href="https://travis-ci.org/treydock/puppet-infiniband"><img
+src="https://travis-ci.org/treydock/puppet-infiniband.svg?branch=master"></a></p>
+
+<p>Installs the InfiniBand software stack.</p>
+
+<h2 id="label-Support">Support</h2>
+<ul><li>
+<p>CentOS 6 &amp; 7 x86_64</p>
+</li></ul>
+
+<h2 id="label-Usage">Usage</h2>
+
+<h3 id="label-infiniband">infiniband</h3>
+
+<p>Standard usage to enable InfiniBand support</p>
+
+<pre class="code ruby"><code class="ruby">class { &#39;infiniband&#39;: }</code></pre>
+
+<p>Define a IBoIP interface</p>
+
+<pre class="code ruby"><code class="ruby">class { &#39;infiniband&#39;:
+  interfaces  =&gt; {
+    &#39;ib0&#39; =&gt; {&#39;ipaddr&#39; =&gt; &#39;192.168.1.1&#39;, &#39;netmask&#39; =&gt; &#39;255.255.255.0&#39;}
+  }
+}</code></pre>
+
+<h2 id="label-Reference">Reference</h2>
+
+<h3 id="label-Classes">Classes</h3>
+
+<h4 id="label-Public+classes">Public classes</h4>
+<ul><li>
+<p><code>infiniband</code>: Installs and configures a system to use InfiniBand</p>
+</li></ul>
+
+<h4 id="label-Private+classes">Private classes</h4>
+<ul><li>
+<p><code>infiniband::install</code>: Installs the InfiniBand packages.</p>
+</li><li>
+<p><code>infiniband::config</code>: Manages the rdma.conf file and the
+mlx4_core module options.</p>
+</li><li>
+<p><code>infiniband::service</code>: Manages the rdma and ibacm services.</p>
+</li><li>
+<p><code>infiniband::providers</code>: Creates infiniband::interface defined
+types based on the interfaces parameter.</p>
+</li><li>
+<p><code>infiniband::params</code>: Sets default values based on the
+<code>osfamily</code> and <code>has_infiniband</code> facts.</p>
+</li></ul>
+
+<h3 id="label-Parameters">Parameters</h3>
+
+<h4 id="label-infiniband">infiniband</h4>
+
+<h5 id="label-packages"><code>packages</code></h5>
+
+<p>The packges to install infiniband support. Default is undef.</p>
+
+<p>If undef the entire set of Infiniband Support packages will be installed.</p>
+
+<h5 id="label-with_optional_packages"><code>with_optional_packages</code></h5>
+
+<p>If true, the packages in <code>optional_packages</code> are installed
+(defaults to true).</p>
+
+<h5 id="label-rdma_service_ensure"><code>rdma_service_ensure</code></h5>
+
+<p>RDMA service ensure parameter. Default to &#39;running&#39; if
+<code>has_infiniband</code> fact is &#39;true&#39;, and &#39;stopped&#39;
+if &#39;has_infiniband&#39; fact is &#39;false&#39;.</p>
+
+<h5 id="label-rdma_service_enable"><code>rdma_service_enable</code></h5>
+
+<p>RDMA service enable parameter. Default to true if
+<code>has_infiniband</code> fact is &#39;true&#39;, and false if
+&#39;has_infiniband&#39; fact is &#39;false&#39;.</p>
+
+<h5 id="label-rdma_service_name"><code>rdma_service_name</code></h5>
+
+<p>RDMA service name (defaults to &#39;rdma&#39;).</p>
+
+<h5 id="label-rdma_service_has_status"><code>rdma_service_has_status</code></h5>
+
+<p>RDMA service has_status parameter (defaults to true).</p>
+
+<h5 id="label-rdma_service_has_restart"><code>rdma_service_has_restart</code></h5>
+
+<p>RDMA service has_restart parameter (defaults to true).</p>
+
+<h5 id="label-ibacm_service_ensure"><code>ibacm_service_ensure</code></h5>
+
+<p>ibacm service ensure parameter. Default to &#39;running&#39; if
+<code>has_infiniband</code> fact is &#39;true&#39;, and &#39;stopped&#39;
+if &#39;has_infiniband&#39; fact is &#39;false&#39;.</p>
+
+<h5 id="label-ibacm_service_enable"><code>ibacm_service_enable</code></h5>
+
+<p>ibacm service enable parameter. Default to true if
+<code>has_infiniband</code> fact is &#39;true&#39;, and false if
+&#39;has_infiniband&#39; fact is &#39;false&#39;.</p>
+
+<h5 id="label-ibacm_service_name"><code>ibacm_service_name</code></h5>
+
+<p>ibacm service name (defaults to &#39;ibacm&#39;).</p>
+
+<h5 id="label-ibacm_service_has_status"><code>ibacm_service_has_status</code></h5>
+
+<p>ibacm service has_status parameter (defaults to true).</p>
+
+<h5 id="label-ibacm_service_has_restart"><code>ibacm_service_has_restart</code></h5>
+
+<p>ibacm service has_restart parameter (defaults to true).</p>
+
+<h5 id="label-rdma_conf_path"><code>rdma_conf_path</code></h5>
+
+<p>The RDMA service configuration path (defaults to
+&#39;/etc/rdma/rdma.conf&#39;).</p>
+
+<h5 id="label-ipoib_load"><code>ipoib_load</code></h5>
+
+<p>Sets the <code>IPOIB_LOAD</code> setting for the RDMA service (defaults to
+&#39;yes&#39;).</p>
+
+<h5 id="label-srp_load"><code>srp_load</code></h5>
+
+<p>Sets the <code>SRP_LOAD</code> setting for the RDMA service (defaults to
+&#39;no&#39;).</p>
+
+<h5 id="label-iser_load"><code>iser_load</code></h5>
+
+<p>Sets the <code>ISER_LOAD</code> setting for the RDMA service (defaults to
+&#39;no&#39;).</p>
+
+<h5 id="label-rds_load"><code>rds_load</code></h5>
+
+<p>Sets the <code>RDS_LOAD</code> setting for the RDMA service (defaults to
+&#39;no&#39;).</p>
+
+<h5 id="label-fixup_mtrr_regs"><code>fixup_mtrr_regs</code></h5>
+
+<p>Sets the <code>FIXUP_MTRR_REGS</code> setting for the RDMA service
+(defaults to &#39;no&#39;).</p>
+
+<h5 id="label-nfsordma_load"><code>nfsordma_load</code></h5>
+
+<p>Sets the <code>NFSoRDMA_LOAD</code> setting for the RDMA service (defaults
+to &#39;yes&#39;).</p>
+
+<h5 id="label-nfsordma_port"><code>nfsordma_port</code></h5>
+
+<p>Sets the <code>NFSoRDMA_PORT</code> setting for the RDMA service (defaults
+to 2050).</p>
+
+<h5 id="label-manage_mlx4_core_options"><code>manage_mlx4_core_options</code></h5>
+
+<p>Boolean that determines if &#39;/etc/modprobe.d/mlx4_core.conf&#39; should
+be managed (defaults to true).</p>
+
+<h5 id="label-log_num_mtt"><code>log_num_mtt</code></h5>
+
+<p>Sets the mlx4_core module&#39;s &#39;log_num_mtt&#39; value. Defaults to
+undef.</p>
+
+<p>When the value is undef the value is determined using the
+<code>calc_log_num_mtt</code> parser function.</p>
+
+<h5 id="label-log_mtts_per_seg"><code>log_mtts_per_seg</code></h5>
+
+<p>Sets the mlx4_core module&#39;s &#39;log_mtts_per_seq&#39; value. Defaults
+to 3.</p>
+
+<h5 id="label-interfaces"><code>interfaces</code></h5>
+
+<p>This Hash can be used to define <code>infiniband::interface</code>
+resources (defaults to an empty Hash).</p>
+
+<h3 id="label-Defines">Defines</h3>
+
+<h4 id="label-infiniband-3A-3Ainterface">infiniband::interface</h4>
+
+<p>Creates the ifcfg file for an IBoIP interface</p>
+
+<pre class="code ruby"><code class="ruby">infiniband::interface { &#39;ib0&#39;:
+  ipaddr  =&gt; &#39;192.168.1.1&#39;,
+  netmask =&gt; &#39;255.255.255.0&#39;,
+}</code></pre>
+
+<h5 id="label-name"><code>name</code></h5>
+
+<p>String: the resource title. Sets the interfaces name, for example
+&#39;ib0&#39;.</p>
+
+<h5 id="label-ipaddr"><code>ipaddr</code></h5>
+
+<p>String: required, no default. The IPADDR for the infiniband interface.</p>
+
+<h5 id="label-netmask"><code>netmask</code></h5>
+
+<p>String: required, no default. The NETMASK for the infiniband interface.</p>
+
+<h5 id="label-gateway"><code>gateway</code></h5>
+
+<p>String: defaults to undef. The GATEWAY for the infiniband interface.</p>
+
+<h5 id="label-ensure"><code>ensure</code></h5>
+
+<p>String: defaults to &#39;present&#39;. Sets if the infiniband::interface
+should be present or absent.</p>
+
+<h5 id="label-enable"><code>enable</code></h5>
+
+<p>Boolean: defaults to true. Sets if the infiniband::interface should be
+enabled.</p>
+
+<h5 id="label-connected_mode"><code>connected_mode</code></h5>
+
+<p>String: defaults to &#39;yes&#39;. The CONNECTED_MODE for the infiniband
+interface.</p>
+
+<h5 id="label-mtu"><code>mtu</code></h5>
+
+<p>String: defaults to undef. The MTU for the infiniband interface.</p>
+
+<h3 id="label-Facts">Facts</h3>
+
+<h4 id="label-has_infiniband">has_infiniband</h4>
+
+<p>Determine if the system&#39;s hardware supports InfiniBand.</p>
+
+<h4 id="label-infiniband_fw_version">infiniband_fw_version</h4>
+
+<p>Reports the firmware version of the InfiniBand interface card.</p>
+
+<p><strong>NOTE:</strong> Only supports getting the value from the first
+interface card found.</p>
+
+<h4 id="label-infiniband_board_id">infiniband_board_id</h4>
+
+<p>Returns the board_id (PSID) of the InfiniBand interface card.</p>
+
+<p><strong>NOTE:</strong> Only supports getting the value from the first
+interface card found.</p>
+
+<h4 id="label-infiniband_rate">infiniband_rate</h4>
+
+<p>Returns the rate of the InfiniBand interface card.</p>
+
+<p><strong>NOTE:</strong> Only supports getting the value from the first
+interface card found.</p>
+
+<h3 id="label-Functions">Functions</h3>
+
+<h4 id="label-calc_log_num_mtt">calc_log_num_mtt</h4>
+
+<p>This function calculates the appropriate value for mlx4_core module&#39;s
+&#39;log_num_mtt&#39; parameter.</p>
+
+<p>The formula is <code>max_reg_mem = (2^log_num_mtt) * (2^log_mtts_per_seg) *
+(page_size_bytes)</code>. This function finds the  log_num_mtt necessary to
+make &#39;max_reg_mem&#39; twice the size of system&#39;s RAM. Ref: <a
+href="http://community.mellanox.com/docs/DOC-1120">community.mellanox.com/docs/DOC-1120</a>.</p>
+
+<p><em>Usage</em>:</p>
+
+<p>calc_log_num_mtt(<code>memorysize_mb</code>, <code>log_mtts_per_seg</code>,
+<code>page_size_bytes</code>)</p>
+<ul><li>
+<p>memorysize_mb - The system&#39;s memory size in MBs. This argument is
+required.</p>
+</li><li>
+<p>log_mtts_per_seg - The value for log_mtts_per_seg. Defaults to &#39;3&#39;
+if undefined.</p>
+</li><li>
+<p>page_size_bytes - The system&#39;s page size in bytes. Defaults to
+&#39;4096&#39; if undefined.</p>
+</li></ul>
+
+<p><em>Examples</em>:</p>
+
+<p>If <code>$::memorysize_mb</code> is 129035.57</p>
+
+<pre class="code ruby"><code class="ruby">calc_log_num_mtt($::memorysize_mb, 3)</code></pre>
+
+<p>Would return 23</p>
+
+<pre class="code ruby"><code class="ruby">calc_log_num_mtt($::memorysize_mb, 1)</code></pre>
+
+<p>Would return 25</p>
+
+<h2 id="label-Development">Development</h2>
+
+<h3 id="label-Testing">Testing</h3>
+
+<p>Testing requires the following dependencies:</p>
+<ul><li>
+<p>rake</p>
+</li><li>
+<p>bundler</p>
+</li></ul>
+
+<p>Install gem dependencies</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_bundle'>bundle</span> <span class='id identifier rubyid_install'>install</span>
+</code></pre>
+
+<p>Run unit tests</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_bundle'>bundle</span> <span class='id identifier rubyid_exec'>exec</span> <span class='id identifier rubyid_rake'>rake</span> <span class='id identifier rubyid_test'>test</span>
+</code></pre>
+
+<p>If you have Vagrant &gt;= 1.2.0 installed you can run system tests</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_bundle'>bundle</span> <span class='id identifier rubyid_exec'>exec</span> <span class='id identifier rubyid_rake'>rake</span> <span class='id identifier rubyid_beaker'>beaker</span>
+</code></pre>
+
+<h2 id="label-TODO">TODO</h2>
+</div></div>
+
+      <div id="footer">
+     Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
+</div>
+
+    </div>
+  </body>
+</html>
