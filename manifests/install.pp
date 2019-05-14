@@ -1,5 +1,5 @@
-# == Class: infiniband::install
-#
+# @summary Install InfiniBand support
+# @api private
 class infiniband::install {
   yum::group { 'infiniband':
     ensure => 'present',

@@ -1,10 +1,5 @@
-# == Class: infiniband::providers
-#
-# Convenience class to call defined types provided
-# by this module.
-#
-# See README.md for more details.
-#
+# @summary Convenience class to call defined types provided by this module.
+# @api private
 class infiniband::providers {
   create_resources('infiniband::interface', $infiniband::interfaces)
 }

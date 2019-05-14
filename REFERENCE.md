@@ -5,16 +5,21 @@
 
 **Classes**
 
-* [`infiniband`](#infiniband): == Class: infiniband  See README.md for more details.
-* [`infiniband::config`](#infinibandconfig): == Class: infiniband
-* [`infiniband::install`](#infinibandinstall): == Class: infiniband::install
-* [`infiniband::params`](#infinibandparams): The infiniband default configuration settings.
-* [`infiniband::providers`](#infinibandproviders): == Class: infiniband::providers  Convenience class to call defined types provided by this module.  See README.md for more details.
-* [`infiniband::service`](#infinibandservice): == Class: infiniband::service
+_Public Classes_
+
+* [`infiniband`](#infiniband): Manage InfiniBand support
+
+_Private Classes_
+
+* `infiniband::config`: Manage InfiniBand config
+* `infiniband::install`: Install InfiniBand support
+* `infiniband::params`: The infiniband default configuration settings.
+* `infiniband::providers`: Convenience class to call defined types provided by this module.
+* `infiniband::service`: Manage InfiniBand services
 
 **Defined types**
 
-* [`infiniband::interface`](#infinibandinterface): == Define: infiniband::interface  See README.md for more details.
+* [`infiniband::interface`](#infinibandinterface): Manage IPoIB interface
 
 **Functions**
 
@@ -24,9 +29,15 @@
 
 ### infiniband
 
-== Class: infiniband
+Manage InfiniBand support
 
-See README.md for more details.
+#### Examples
+
+##### 
+
+```puppet
+include ::infiniband
+```
 
 #### Parameters
 
@@ -36,7 +47,7 @@ The following parameters are available in the `infiniband` class.
 
 Data type: `Array`
 
-
+The extra packges to install.
 
 Default value: []
 
@@ -44,7 +55,8 @@ Default value: []
 
 Data type: `String`
 
-
+RDMA service ensure parameter.
+Default to 'running' if `has_infiniband` fact is 'true', and 'stopped' if 'has_infiniband' fact is 'false'.
 
 Default value: $infiniband::params::service_ensure
 
@@ -52,7 +64,8 @@ Default value: $infiniband::params::service_ensure
 
 Data type: `Boolean`
 
-
+RDMA service enable parameter.
+Default to true if `has_infiniband` fact is 'true', and false if 'has_infiniband' fact is 'false'.
 
 Default value: $infiniband::params::service_enable
 
@@ -60,7 +73,7 @@ Default value: $infiniband::params::service_enable
 
 Data type: `String`
 
-
+RDMA service name.
 
 Default value: $infiniband::params::rdma_service_name
 
@@ -68,7 +81,7 @@ Default value: $infiniband::params::rdma_service_name
 
 Data type: `Boolean`
 
-
+RDMA service has_status parameter.
 
 Default value: $infiniband::params::rdma_service_has_status
 
@@ -76,7 +89,7 @@ Default value: $infiniband::params::rdma_service_has_status
 
 Data type: `Boolean`
 
-
+RDMA service has_restart parameter.
 
 Default value: $infiniband::params::rdma_service_has_restart
 
@@ -84,7 +97,8 @@ Default value: $infiniband::params::rdma_service_has_restart
 
 Data type: `String`
 
-
+ibacm service ensure parameter.
+Default to 'running' if `has_infiniband` fact is 'true', and 'stopped' if 'has_infiniband' fact is 'false'.
 
 Default value: $infiniband::params::service_ensure
 
@@ -92,7 +106,8 @@ Default value: $infiniband::params::service_ensure
 
 Data type: `Boolean`
 
-
+ibacm service enable parameter.
+Default to true if `has_infiniband` fact is 'true', and false if 'has_infiniband' fact is 'false'.
 
 Default value: $infiniband::params::service_enable
 
@@ -100,7 +115,7 @@ Default value: $infiniband::params::service_enable
 
 Data type: `String`
 
-
+ibacm service name.
 
 Default value: $infiniband::params::ibacm_service_name
 
@@ -108,7 +123,7 @@ Default value: $infiniband::params::ibacm_service_name
 
 Data type: `Boolean`
 
-
+ibacm service has_status parameter.
 
 Default value: $infiniband::params::ibacm_service_has_status
 
@@ -116,7 +131,7 @@ Default value: $infiniband::params::ibacm_service_has_status
 
 Data type: `Boolean`
 
-
+ibacm service has_restart parameter.
 
 Default value: $infiniband::params::ibacm_service_has_restart
 
@@ -124,7 +139,7 @@ Default value: $infiniband::params::ibacm_service_has_restart
 
 Data type: `Stdlib::Absolutepath`
 
-
+The RDMA service configuration path.
 
 Default value: $infiniband::params::rdma_conf_path
 
@@ -132,7 +147,7 @@ Default value: $infiniband::params::rdma_conf_path
 
 Data type: `Enum['yes', 'no']`
 
-
+Sets the `IPOIB_LOAD` setting for the RDMA service.
 
 Default value: 'yes'
 
@@ -140,7 +155,7 @@ Default value: 'yes'
 
 Data type: `Enum['yes', 'no']`
 
-
+Sets the `SRP_LOAD` setting for the RDMA service.
 
 Default value: 'no'
 
@@ -148,7 +163,7 @@ Default value: 'no'
 
 Data type: `Enum['yes', 'no']`
 
-
+Sets the `ISER_LOAD` setting for the RDMA service.
 
 Default value: 'no'
 
@@ -156,7 +171,7 @@ Default value: 'no'
 
 Data type: `Enum['yes', 'no']`
 
-
+Sets the `RDS_LOAD` setting for the RDMA service.
 
 Default value: 'no'
 
@@ -164,7 +179,7 @@ Default value: 'no'
 
 Data type: `Enum['yes', 'no']`
 
-
+Sets the `FIXUP_MTRR_REGS` setting for the RDMA service.
 
 Default value: 'no'
 
@@ -172,7 +187,7 @@ Default value: 'no'
 
 Data type: `Enum['yes', 'no']`
 
-
+Sets the `NFSoRDMA_LOAD` setting for the RDMA service.
 
 Default value: 'yes'
 
@@ -180,7 +195,7 @@ Default value: 'yes'
 
 Data type: `Integer[0, 65535]`
 
-
+Sets the `NFSoRDMA_PORT` setting for the RDMA service.
 
 Default value: 2050
 
@@ -188,7 +203,7 @@ Default value: 2050
 
 Data type: `Boolean`
 
-
+Boolean that determines if '/etc/modprobe.d/mlx4_core.conf' should be managed.
 
 Default value: `true`
 
@@ -196,7 +211,8 @@ Default value: `true`
 
 Data type: `Optional[Integer]`
 
-
+Sets the mlx4_core module's 'log_num_mtt' value.
+When the value is undef the value is determined using the `calc_log_num_mtt` parser function.
 
 Default value: `undef`
 
@@ -204,7 +220,7 @@ Default value: `undef`
 
 Data type: `Integer`
 
-
+Sets the mlx4_core module's 'log_mtts_per_seq' value.
 
 Default value: 3
 
@@ -212,64 +228,52 @@ Default value: 3
 
 Data type: `Hash`
 
-
+This Hash can be used to define `infiniband::interface` resources.
 
 Default value: {}
-
-### infiniband::config
-
-== Class: infiniband
-
-### infiniband::install
-
-== Class: infiniband::install
-
-### infiniband::params
-
-The infiniband default configuration settings.
-
-### infiniband::providers
-
-== Class: infiniband::providers
-
-Convenience class to call defined types provided
-by this module.
-
-See README.md for more details.
-
-### infiniband::service
-
-== Class: infiniband::service
 
 ## Defined types
 
 ### infiniband::interface
 
-== Define: infiniband::interface
+Manage IPoIB interface
 
-See README.md for more details.
+#### Examples
+
+##### Creates the ifcfg file for an IBoIP interface
+
+```puppet
+infiniband::interface { 'ib0':
+  ipaddr  => '192.168.1.1',
+  netmask => '255.255.255.0',
+}
+```
 
 #### Parameters
 
 The following parameters are available in the `infiniband::interface` defined type.
 
+##### `name`
+
+The resource title.  Sets the interfaces name, for example 'ib0'.
+
 ##### `ipaddr`
 
 Data type: `Stdlib::Compat::Ip_address`
 
-
+The IPADDR for the infiniband interface.
 
 ##### `netmask`
 
 Data type: `Stdlib::Compat::Ip_address`
 
-
+The NETMASK for the infiniband interface.
 
 ##### `gateway`
 
 Data type: `Optional[Stdlib::Compat::Ip_address]`
 
-
+The GATEWAY for the infiniband interface.
 
 Default value: `undef`
 
@@ -277,7 +281,7 @@ Default value: `undef`
 
 Data type: `Enum['present', 'absent']`
 
-
+Sets if the infiniband::interface should be present or absent.
 
 Default value: 'present'
 
@@ -285,7 +289,7 @@ Default value: 'present'
 
 Data type: `Boolean`
 
-
+Sets if the infiniband::interface should be enabled at boot.
 
 Default value: `true`
 
@@ -293,7 +297,7 @@ Default value: `true`
 
 Data type: `Enum['yes', 'no']`
 
-
+The CONNECTED_MODE value for the infiniband interface.
 
 Default value: 'yes'
 
@@ -301,7 +305,7 @@ Default value: 'yes'
 
 Data type: `Optional[Integer]`
 
-
+The MTU for the infiniband interface.
 
 Default value: `undef`
 

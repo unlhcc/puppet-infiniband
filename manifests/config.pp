@@ -1,5 +1,5 @@
-# == Class: infiniband
-#
+# @summary Manage InfiniBand config
+# @api private
 class infiniband::config {
 
   Shellvar {
