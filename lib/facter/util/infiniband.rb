@@ -140,4 +140,56 @@ class Facter::Util::Infiniband
     board_id = self.read_sysfs(sysfs_path)
     board_id
   end
+  
+  # Returns rate of InifniBand port
+  #
+  # @return [String]
+  #
+  # @api private
+  def self.get_real_port_rate(hca, port)
+    port_sysfs_path = Dir.glob(File.join('/sys/class/infiniband', hca, 'ports', port))
+    return nil if port_sysfs_path.nil?
+
+    rate_sysfs_path = File.join(port_sysfs_path, 'rate')
+    rate = self.read_sysfs(rate_sysfs_path)
+    rate[/^(\d+)\s/,1]
+  end
+
+  # Returns state of InifniBand port
+  #
+  # @return [String]
+  #
+  # @api private
+  def self.get_real_port_state(hca, port)
+    port_sysfs_path = Dir.glob(File.join('/sys/class/infiniband', hca, 'ports', port))
+    return nil if port_sysfs_path.nil?
+
+    state_sysfs_path = File.join(port_sysfs_path, 'state')
+    state = self.read_sysfs(state_sysfs_path)
+    state[/: (.*)/,1]
+  end
+
+  # Returns hash of net device names (ib0, p1p1) and data about each
+  #
+  # @return [Hash]
+  #
+  # @api private
+  def self.get_netdev_to_hcaport
+    netdevs = {}
+    if ! Facter::Util::Resolution.which('ibdev2netdev')
+      return {}
+    end
+    output = Facter::Util::Resolution.exec('ibdev2netdev')
+    output.each_line do |line|
+      split = line.split(' ')
+      netdevs[split[4]] = {
+        'hca' => split[0],
+        'port' => split[2],
+        'state' => self.get_real_port_state(split[0], split[2]),
+        'rate' => self.get_real_port_rate(split[0], split[2])
+      }
+
+    end
+    netdevs
+  end  
 end
