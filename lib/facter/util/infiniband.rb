@@ -169,6 +169,20 @@ class Facter::Util::Infiniband
     state[/: (.*)/,1]
   end
 
+  # Returns link layer of Infiniband port (Ethernet or InfiniBand)
+  #
+  # @return [String]
+  #
+  # @api private
+  def self.get_real_port_linklayer(hca, port)
+    port_sysfs_path = Dir.glob(File.join('/sys/class/infiniband', hca, 'ports', port)) 
+    return nil if port_sysfs_path.nil?
+    
+    linklayer_sysfs_path = File.join(port_sysfs_path, 'link_layer')
+    linklayer = self.read_sysfs(linklayer_sysfs_path)
+    linklayer
+  end
+
   # Returns hash of net device names (ib0, p1p1) and data about each
   #
   # @return [Hash]
@@ -186,7 +200,8 @@ class Facter::Util::Infiniband
         'hca' => split[0],
         'port' => split[2],
         'state' => self.get_real_port_state(split[0], split[2]),
-        'rate' => self.get_real_port_rate(split[0], split[2])
+        'rate' => self.get_real_port_rate(split[0], split[2]),
+        'link_layer' => self.get_real_port_linklayer(split[0], split[2]),
       }
 
     end
