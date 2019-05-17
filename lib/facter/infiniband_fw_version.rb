@@ -12,9 +12,9 @@
 require 'facter/util/infiniband'
 
 Facter.add(:infiniband_fw_version) do
-  confine :has_infiniband => true
-  ports = Facter::Util::Infiniband.get_ports
-  if ! ports.empty?
+  confine has_infiniband: true
+  ports = Facter::Util::Infiniband.ports
+  unless ports.empty?
     fw_version = Facter::Util::Infiniband.get_port_fw_version(ports.first)
     if fw_version
       setcode do

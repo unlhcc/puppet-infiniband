@@ -24,15 +24,14 @@ Puppet::Functions.create_function(:'infiniband::calc_log_num_mtt') do
 
     result = 0
     i = 1
-    while result == 0 do
+    while result.zero?
       target = (2**i) * page_size_bytes.to_i * log_mtts_per_seg_multiplier
-      target_next = (2**(i+1)) * page_size_bytes.to_i * log_mtts_per_seg_multiplier
+      target_next = (2**(i + 1)) * page_size_bytes.to_i * log_mtts_per_seg_multiplier
 
-      if target > reg_mem
-        break
-      elsif target == reg_mem
+      break if target > reg_mem
+      if target == reg_mem
         result = i
-      elsif target < reg_mem and target_next > reg_mem
+      elsif target < reg_mem && target_next > reg_mem
         result = i + 1
       end
 

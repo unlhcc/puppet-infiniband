@@ -9,7 +9,7 @@
 require 'facter/util/infiniband'
 
 Facter.add(:infiniband_hca_board_id) do
-  confine :has_infiniband => true
+  confine has_infiniband: true
   setcode do
     hcas = Facter.fact(:infiniband_hcas).value || []
     hca_board_id = {}
