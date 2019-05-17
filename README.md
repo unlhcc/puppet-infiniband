@@ -53,6 +53,53 @@ Returns the rate of the InfiniBand interface card.
 
 **NOTE:** Only supports getting the value from the first interface card found.
 
+#### infiniband_hcas
+
+Returns Array of HCAs:
+
+```
+[
+  "mlx5_0",
+  "mlx5_1",
+  "mlx5_2",
+  "mlx5_3"
+]
+```
+
+#### infiniband_hca_board_id
+
+Returns Hash of PSID / Board IDs for each HCA:
+
+```
+{
+  mlx5_0 => "MT_0000000023",
+  mlx5_1 => "MT_0000000023",
+  mlx5_2 => "MT_0000000023",
+  mlx5_3 => "MT_0000000023"
+}
+```
+
+#### infiniband_hca_port_guids
+
+Return Hash of HCA port GUIDs:
+
+```
+{
+  mlx5_0 => {
+    1 => "0x506b4b0300aaffcc"
+  },
+  mlx5_1 => {
+    1 => "0x506b4b0300aaffcd"
+  },
+  mlx5_2 => {
+    1 => "0x506b4b0300aaffc6"
+  },
+  mlx5_3 => {
+    1 => "0x506b4b0300aaffc7"
+  }
+}
+```
+
 ## Development
 
 ### Testing
