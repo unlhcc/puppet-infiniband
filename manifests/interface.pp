@@ -1,6 +1,29 @@
-# == Define: infiniband::interface
+# @summary Manage IPoIB interface
 #
-# See README.md for more details.
+# @example Creates the ifcfg file for an IBoIP interface
+#   infiniband::interface { 'ib0':
+#     ipaddr  => '192.168.1.1',
+#     netmask => '255.255.255.0',
+#   }
+#
+#
+# @param name
+#   The resource title.  Sets the interfaces name, for example 'ib0'.
+# @param ipaddr
+#   The IPADDR for the infiniband interface.
+# @param netmask
+#   The NETMASK for the infiniband interface.
+# @param gateway
+#   The GATEWAY for the infiniband interface.
+# @param ensure
+#   Sets if the infiniband::interface should be present or absent.
+# @param enable
+#   Sets if the infiniband::interface should be enabled at boot.
+# @param connected_mode
+#   The CONNECTED_MODE value for the infiniband interface.
+# @param mtu
+#   The MTU for the infiniband interface.
+#
 define infiniband::interface (
   Stdlib::Compat::Ip_address $ipaddr,
   Stdlib::Compat::Ip_address $netmask,

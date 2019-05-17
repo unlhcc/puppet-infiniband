@@ -1,4 +1,5 @@
-# The infiniband default configuration settings.
+# @summary The infiniband default configuration settings.
+# @api private
 class infiniband::params {
 
   case $::osfamily {

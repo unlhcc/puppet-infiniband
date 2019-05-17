@@ -1,5 +1,5 @@
-# == Class: infiniband::service
-#
+# @summary Manage InfiniBand services
+# @api private
 class infiniband::service {
 
   service { 'rdma':
