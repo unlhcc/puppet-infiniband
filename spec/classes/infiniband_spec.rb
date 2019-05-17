@@ -18,7 +18,7 @@ describe 'infiniband' do
       let :facts do
         facts.merge({
           has_infiniband: true,
-          memorysize_mb: '64399.75',
+          memory: { system: { total_bytes: 67528032256 }}
         })
       end
 
