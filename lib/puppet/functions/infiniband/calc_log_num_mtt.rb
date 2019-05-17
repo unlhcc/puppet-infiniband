@@ -1,4 +1,14 @@
+# This function calculates the appropriate value for mlx4_core module's `log_num_mtt` parameter.
+#
+# The formula is `max_reg_mem = (2^log_num_mtt) * (2^log_mtts_per_seg) * (page_size_bytes)`.  This function finds the
+# log_num_mtt necessary to make 'max_reg_mem' twice the size of system's RAM.  Ref: http://community.mellanox.com/docs/DOC-1120.
 Puppet::Functions.create_function(:'infiniband::calc_log_num_mtt') do
+  # @param mem The system memory in bytes
+  # @param log_mtts_per_seg The value for log_mtts_per_seg.  Defaults to `3` if undefined.
+  # @param page_size_bytes The system's page size in bytes.  Defaults to `4096` if undefined.
+  # @return [Integer] The calculated log_num_mtt value
+  # @example Using system memory size to calculate value
+  #   infiniband::calc_log_num_mtt($facts['memory']['system']['total_bytes'])
   dispatch :calc do
     optional_param 'Variant[Undef,Integer,Float]', :mem
     optional_param 'Integer', :log_mtts_per_seg

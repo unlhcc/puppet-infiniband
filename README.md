@@ -53,36 +53,6 @@ Returns the rate of the InfiniBand interface card.
 
 **NOTE:** Only supports getting the value from the first interface card found.
 
-
-### Functions
-
-#### calc\_log\_num\_mtt
-
-This function calculates the appropriate value for mlx4_core module's 'log\_num\_mtt' parameter.
-
-The formula is `max_reg_mem = (2^log_num_mtt) * (2^log_mtts_per_seg) * (page_size_bytes)`.  This function finds the
- log\_num\_mtt necessary to make 'max\_reg\_mem' twice the size of system's RAM.  Ref: http://community.mellanox.com/docs/DOC-1120.
-
-*Usage*:
-
-calc_log_num_mtt(`memorysize_mb`, `log_mtts_per_seg`, `page_size_bytes`)
-
-* memorysize_mb - The system's memory size in MBs.  This argument is required.
-* log\_mtts\_per\_seg - The value for log\_mtts\_per\_seg.  Defaults to '3' if undefined.
-* page\_size\_bytes - The system's page size in bytes.  Defaults to '4096' if undefined.
-
-*Examples*:
-
-If `$::memorysize_mb` is 129035.57
-
-    calc_log_num_mtt($::memorysize_mb, 3)
-
-Would return 23
-
-    calc_log_num_mtt($::memorysize_mb, 1)
-
-Would return 25
-
 ## Development
 
 ### Testing

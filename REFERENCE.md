@@ -23,7 +23,7 @@ _Private Classes_
 
 **Functions**
 
-* [`calc_log_num_mtt`](#calc_log_num_mtt): 
+* [`infiniband::calc_log_num_mtt`](#infinibandcalc_log_num_mtt): This function calculates the appropriate value for mlx4_core module's `log_num_mtt` parameter.  The formula is `max_reg_mem = (2^log_num_mtt)
 
 ## Classes
 
@@ -311,15 +311,55 @@ Default value: `undef`
 
 ## Functions
 
-### calc_log_num_mtt
+### infiniband::calc_log_num_mtt
 
-Type: Ruby 3.x API
+Type: Ruby 4.x API
 
-The calc_log_num_mtt function.
+This function calculates the appropriate value for mlx4_core module's `log_num_mtt` parameter.
 
-#### `calc_log_num_mtt()`
+The formula is `max_reg_mem = (2^log_num_mtt) * (2^log_mtts_per_seg) * (page_size_bytes)`.  This function finds the
+log_num_mtt necessary to make 'max_reg_mem' twice the size of system's RAM.  Ref: http://community.mellanox.com/docs/DOC-1120.
 
-The calc_log_num_mtt function.
+#### Examples
 
-Returns: `Any`
+##### Using system memory size to calculate value
+
+```puppet
+infiniband::calc_log_num_mtt($facts['memory']['system']['total_bytes'])
+```
+
+#### `infiniband::calc_log_num_mtt(Optional[Variant[Undef,Integer,Float]] $mem, Optional[Integer] $log_mtts_per_seg, Optional[Integer] $page_size_bytes)`
+
+This function calculates the appropriate value for mlx4_core module's `log_num_mtt` parameter.
+
+The formula is `max_reg_mem = (2^log_num_mtt) * (2^log_mtts_per_seg) * (page_size_bytes)`.  This function finds the
+log_num_mtt necessary to make 'max_reg_mem' twice the size of system's RAM.  Ref: http://community.mellanox.com/docs/DOC-1120.
+
+Returns: `Integer` The calculated log_num_mtt value
+
+##### Examples
+
+###### Using system memory size to calculate value
+
+```puppet
+infiniband::calc_log_num_mtt($facts['memory']['system']['total_bytes'])
+```
+
+##### `mem`
+
+Data type: `Optional[Variant[Undef,Integer,Float]]`
+
+The system memory in bytes
+
+##### `log_mtts_per_seg`
+
+Data type: `Optional[Integer]`
+
+The value for log_mtts_per_seg.  Defaults to `3` if undefined.
+
+##### `page_size_bytes`
+
+Data type: `Optional[Integer]`
+
+The system's page size in bytes.  Defaults to `4096` if undefined.
 
