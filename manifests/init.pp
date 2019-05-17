@@ -29,7 +29,7 @@ class infiniband (
 
   if $manage_mlx4_core_options {
     $real_log_num_mtt = $log_num_mtt ? {
-      Undef   => calc_log_num_mtt($::memorysize_mb, $log_mtts_per_seg),
+      Undef   => infiniband::calc_log_num_mtt($facts.dig('memory','system','total_bytes'), $log_mtts_per_seg),
       default => $log_num_mtt,
     }
   }
