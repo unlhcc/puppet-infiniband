@@ -100,6 +100,22 @@ Return Hash of HCA port GUIDs:
 }
 ```
 
+#### infiniband_netdevs
+
+Return Hash of IPoIB netdev information:
+
+```
+{
+  ib0 => {
+    hca => "mlx5_0",
+    port => "1",
+    state => "ACTIVE",
+    rate => "100",
+    link_layer => "InfiniBand"
+  }
+}
+```
+
 ## Development
 
 ### Testing
