@@ -39,6 +39,17 @@ class Facter::Util::Infiniband
     output.strip
   end
 
+  # Get path to port sysfs
+  #
+  # @return [String]
+  #
+  # @api private
+  def self.port_sysfs_path(hca, port)
+    port_sysfs_path = File.join('/sys/class/infiniband', hca, 'ports', port)
+    return nil unless File.exist?(port_sysfs_path)
+    port_sysfs_path
+  end
+
   # Returns firmware version of an InfiniBand port
   #
   # @return [String]
@@ -140,19 +151,20 @@ class Facter::Util::Infiniband
     board_id = read_sysfs(sysfs_path)
     board_id
   end
-  
+
   # Returns rate of InifniBand port
   #
   # @return [String]
   #
   # @api private
   def self.get_real_port_rate(hca, port)
-    port_sysfs_path = Dir.glob(File.join('/sys/class/infiniband', hca, 'ports', port))
+    port_sysfs_path = self.port_sysfs_path(hca, port)
     return nil if port_sysfs_path.nil?
 
     rate_sysfs_path = File.join(port_sysfs_path, 'rate')
-    rate = self.read_sysfs(rate_sysfs_path)
-    rate[/^(\d+)\s/,1]
+    rate = read_sysfs(rate_sysfs_path)
+    return nil if rate.nil?
+    rate[%r{^(\d+)\s}, 1]
   end
 
   # Returns state of InifniBand port
@@ -161,12 +173,13 @@ class Facter::Util::Infiniband
   #
   # @api private
   def self.get_real_port_state(hca, port)
-    port_sysfs_path = Dir.glob(File.join('/sys/class/infiniband', hca, 'ports', port))
+    port_sysfs_path = self.port_sysfs_path(hca, port)
     return nil if port_sysfs_path.nil?
 
     state_sysfs_path = File.join(port_sysfs_path, 'state')
-    state = self.read_sysfs(state_sysfs_path)
-    state[/: (.*)/,1]
+    state = read_sysfs(state_sysfs_path)
+    return nil if state.nil?
+    state[%r{: (.*)}, 1]
   end
 
   # Returns link layer of Infiniband port (Ethernet or InfiniBand)
@@ -175,11 +188,11 @@ class Facter::Util::Infiniband
   #
   # @api private
   def self.get_real_port_linklayer(hca, port)
-    port_sysfs_path = Dir.glob(File.join('/sys/class/infiniband', hca, 'ports', port)) 
+    port_sysfs_path = self.port_sysfs_path(hca, port)
     return nil if port_sysfs_path.nil?
-    
+
     linklayer_sysfs_path = File.join(port_sysfs_path, 'link_layer')
-    linklayer = self.read_sysfs(linklayer_sysfs_path)
+    linklayer = read_sysfs(linklayer_sysfs_path)
     linklayer
   end
 
@@ -188,23 +201,24 @@ class Facter::Util::Infiniband
   # @return [Hash]
   #
   # @api private
-  def self.get_netdev_to_hcaport
+  def self.netdev_to_hcaport
     netdevs = {}
-    if ! Facter::Util::Resolution.which('ibdev2netdev')
+    unless Facter::Util::Resolution.which('ibdev2netdev')
       return {}
     end
     output = Facter::Util::Resolution.exec('ibdev2netdev')
+    return {} if output.nil?
+    return {} if output.strip.empty?
     output.each_line do |line|
       split = line.split(' ')
       netdevs[split[4]] = {
         'hca' => split[0],
         'port' => split[2],
-        'state' => self.get_real_port_state(split[0], split[2]),
-        'rate' => self.get_real_port_rate(split[0], split[2]),
-        'link_layer' => self.get_real_port_linklayer(split[0], split[2]),
+        'state' => get_real_port_state(split[0], split[2]),
+        'rate' => get_real_port_rate(split[0], split[2]),
+        'link_layer' => get_real_port_linklayer(split[0], split[2]),
       }
-
     end
     netdevs
-  end  
+  end
 end

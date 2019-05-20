@@ -12,8 +12,13 @@
 require 'facter/util/infiniband'
 
 Facter.add(:infiniband_netdevs) do
-  confine :has_infiniband => true
+  confine has_infiniband: true
   setcode do
-    Facter::Util::Infiniband.get_netdev_to_hcaport
+    netdevs = Facter::Util::Infiniband.netdev_to_hcaport
+    if netdevs.empty?
+      nil
+    else
+      netdevs
+    end
   end
 end
