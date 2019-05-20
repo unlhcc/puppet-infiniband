@@ -12,13 +12,13 @@
 require 'facter/util/infiniband'
 
 Facter.add(:infiniband_rate) do
-  confine :has_infiniband => true
-  ports = Facter::Util::Infiniband.get_ports
-  if ! ports.empty?
+  confine has_infiniband: true
+  ports = Facter::Util::Infiniband.ports
+  unless ports.empty?
     rate = Facter::Util::Infiniband.get_port_rate(ports.first)
     if rate
       setcode do
-        rate[/^(\d+)\s/,1]
+        rate[%r{^(\d+)\s}, 1]
       end
     end
   end

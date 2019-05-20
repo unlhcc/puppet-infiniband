@@ -12,7 +12,7 @@
 require 'facter/util/infiniband'
 
 Facter.add(:has_infiniband) do
-  confine :kernel => "Linux"
+  confine kernel: 'Linux'
   setcode do
     ib_device_count = Facter::Util::Infiniband.count_ib_devices
     ib_device_count > 0

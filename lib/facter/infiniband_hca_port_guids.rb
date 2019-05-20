@@ -9,13 +9,13 @@
 require 'facter/util/infiniband'
 
 Facter.add(:infiniband_hca_port_guids) do
-  confine :has_infiniband => true
+  confine has_infiniband: true
   setcode do
     hcas = Facter.fact(:infiniband_hcas).value || []
     hca_port_guids = {}
     hcas.each do |hca|
       port_guids = Facter::Util::Infiniband.get_hca_port_guids(hca)
-      if ! port_guids.empty?
+      unless port_guids.empty?
         hca_port_guids[hca] = port_guids
       end
     end

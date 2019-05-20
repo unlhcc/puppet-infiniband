@@ -12,9 +12,9 @@
 require 'facter/util/infiniband'
 
 Facter.add(:infiniband_board_id) do
-  confine :has_infiniband => true
-  ports = Facter::Util::Infiniband.get_ports
-  if ! ports.empty?
+  confine has_infiniband: true
+  ports = Facter::Util::Infiniband.ports
+  unless ports.empty?
     board_id = Facter::Util::Infiniband.get_port_board_id(ports.first)
     if board_id
       setcode do
