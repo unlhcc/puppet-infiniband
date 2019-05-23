@@ -76,6 +76,39 @@ describe 'infiniband::interface' do
 
         it { is_expected.to contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with_content(my_fixture_read('ifcfg-ib0_with_gateway')) }
       end
+
+      context 'bonding => true' do
+        let :facts do
+          facts.merge(has_infiniband: true,
+                      memorysize_mb: '64399.75',
+                      infiniband_netdevs: {
+                        ib0: { hca: 'mlx5_0' },
+                        ib1: { hca: 'mlx5_1' },
+                      })
+        end
+
+        let :title do
+          'ibbond0'
+        end
+
+        let :params do
+          default_params.merge(bonding: true, bonding_slaves: ['ib0', 'ib1'], mtu: 65_520)
+        end
+
+        it {
+          is_expected.to contain_file('/etc/sysconfig/network-scripts/ifcfg-ib0').with_content(my_fixture_read('ifcfg-bond-slave-ib0'))
+          is_expected.to contain_file('/etc/sysconfig/network-scripts/ifcfg-ib1').with_content(my_fixture_read('ifcfg-bond-slave-ib1'))
+          is_expected.to contain_file('/etc/sysconfig/network-scripts/ifcfg-ibbond0').with_content(my_fixture_read('ifcfg-bond-master-ibbond0'))
+        }
+      end
+
+      context 'bonding => true, no slave interfaces' do
+        let :params do
+          default_params.merge(bonding: true)
+        end
+
+        it { is_expected.to compile.and_raise_error(%r{No slave interfaces given for bonding interface}) }
+      end
     end
   end
 end
