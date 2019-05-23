@@ -309,6 +309,30 @@ The MTU for the infiniband interface.
 
 Default value: `undef`
 
+##### `bonding`
+
+Data type: `Boolean`
+
+If this interface is a bonding interface (true/false); defaults to false
+
+Default value: `false`
+
+##### `bonding_slaves`
+
+Data type: `Array[String]`
+
+Array of interfaces that should be enslaved in the bonding interface
+
+Default value: []
+
+##### `bonding_opts`
+
+Data type: `String`
+
+The bonding options to use for this bonding interface
+
+Default value: 'mode=active-backup miimon=100'
+
 ## Functions
 
 ### infiniband::calc_log_num_mtt
