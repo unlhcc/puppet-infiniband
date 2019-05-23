@@ -76,20 +76,27 @@
   </dl>
 </div>
 
+  <h2>Summary</h2>
+  Manage InfiniBand support
+
 <h2>Overview</h2>
 <div class="docstring">
   <div class="discussion">
     
-<p>== Class: infiniband</p>
-
-<p>See README.md for more details.</p>
-
   </div>
 </div>
 
 
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+      <pre class="example code"><code>include ::infiniband</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -102,6 +109,11 @@
       
         <em class="default">(defaults to: <tt>[]</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>The extra packges to install.</p>
+</div>
       
     </li>
   
@@ -116,6 +128,13 @@
         <em class="default">(defaults to: <tt>$infiniband::params::service_ensure</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>RDMA service ensure parameter. Default to &#39;running&#39; if
+<code>has_infiniband</code> fact is &#39;true&#39;, and &#39;stopped&#39;
+if &#39;has_infiniband&#39; fact is &#39;false&#39;.</p>
+</div>
+      
     </li>
   
     <li>
@@ -128,6 +147,13 @@
       
         <em class="default">(defaults to: <tt>$infiniband::params::service_enable</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>RDMA service enable parameter. Default to true if
+<code>has_infiniband</code> fact is &#39;true&#39;, and false if
+&#39;has_infiniband&#39; fact is &#39;false&#39;.</p>
+</div>
       
     </li>
   
@@ -142,6 +168,11 @@
         <em class="default">(defaults to: <tt>$infiniband::params::rdma_service_name</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>RDMA service name.</p>
+</div>
+      
     </li>
   
     <li>
@@ -154,6 +185,11 @@
       
         <em class="default">(defaults to: <tt>$infiniband::params::rdma_service_has_status</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>RDMA service has_status parameter.</p>
+</div>
       
     </li>
   
@@ -168,6 +204,11 @@
         <em class="default">(defaults to: <tt>$infiniband::params::rdma_service_has_restart</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>RDMA service has_restart parameter.</p>
+</div>
+      
     </li>
   
     <li>
@@ -180,6 +221,13 @@
       
         <em class="default">(defaults to: <tt>$infiniband::params::service_ensure</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>ibacm service ensure parameter. Default to &#39;running&#39; if
+<code>has_infiniband</code> fact is &#39;true&#39;, and &#39;stopped&#39;
+if &#39;has_infiniband&#39; fact is &#39;false&#39;.</p>
+</div>
       
     </li>
   
@@ -194,6 +242,13 @@
         <em class="default">(defaults to: <tt>$infiniband::params::service_enable</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>ibacm service enable parameter. Default to true if
+<code>has_infiniband</code> fact is &#39;true&#39;, and false if
+&#39;has_infiniband&#39; fact is &#39;false&#39;.</p>
+</div>
+      
     </li>
   
     <li>
@@ -206,6 +261,11 @@
       
         <em class="default">(defaults to: <tt>$infiniband::params::ibacm_service_name</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>ibacm service name.</p>
+</div>
       
     </li>
   
@@ -220,6 +280,11 @@
         <em class="default">(defaults to: <tt>$infiniband::params::ibacm_service_has_status</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>ibacm service has_status parameter.</p>
+</div>
+      
     </li>
   
     <li>
@@ -232,6 +297,11 @@
       
         <em class="default">(defaults to: <tt>$infiniband::params::ibacm_service_has_restart</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>ibacm service has_restart parameter.</p>
+</div>
       
     </li>
   
@@ -246,6 +316,11 @@
         <em class="default">(defaults to: <tt>$infiniband::params::rdma_conf_path</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>The RDMA service configuration path.</p>
+</div>
+      
     </li>
   
     <li>
@@ -258,6 +333,11 @@
       
         <em class="default">(defaults to: <tt>&#39;yes&#39;</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>Sets the <code>IPOIB_LOAD</code> setting for the RDMA service.</p>
+</div>
       
     </li>
   
@@ -272,6 +352,11 @@
         <em class="default">(defaults to: <tt>&#39;no&#39;</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>Sets the <code>SRP_LOAD</code> setting for the RDMA service.</p>
+</div>
+      
     </li>
   
     <li>
@@ -284,6 +369,11 @@
       
         <em class="default">(defaults to: <tt>&#39;no&#39;</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>Sets the <code>ISER_LOAD</code> setting for the RDMA service.</p>
+</div>
       
     </li>
   
@@ -298,6 +388,11 @@
         <em class="default">(defaults to: <tt>&#39;no&#39;</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>Sets the <code>RDS_LOAD</code> setting for the RDMA service.</p>
+</div>
+      
     </li>
   
     <li>
@@ -310,6 +405,11 @@
       
         <em class="default">(defaults to: <tt>&#39;no&#39;</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>Sets the <code>FIXUP_MTRR_REGS</code> setting for the RDMA service.</p>
+</div>
       
     </li>
   
@@ -324,6 +424,11 @@
         <em class="default">(defaults to: <tt>&#39;yes&#39;</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>Sets the <code>NFSoRDMA_LOAD</code> setting for the RDMA service.</p>
+</div>
+      
     </li>
   
     <li>
@@ -336,6 +441,11 @@
       
         <em class="default">(defaults to: <tt>2050</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>Sets the <code>NFSoRDMA_PORT</code> setting for the RDMA service.</p>
+</div>
       
     </li>
   
@@ -350,6 +460,12 @@
         <em class="default">(defaults to: <tt>true</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>Boolean that determines if &#39;/etc/modprobe.d/mlx4_core.conf&#39; should
+be managed.</p>
+</div>
+      
     </li>
   
     <li>
@@ -362,6 +478,13 @@
       
         <em class="default">(defaults to: <tt>undef</tt>)</em>
       
+      
+        &mdash;
+        <div class='inline'>
+<p>Sets the mlx4_core module&#39;s &#39;log_num_mtt&#39; value. When the value
+is undef the value is determined using the <code>calc_log_num_mtt</code>
+parser function.</p>
+</div>
       
     </li>
   
@@ -376,6 +499,11 @@
         <em class="default">(defaults to: <tt>3</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>Sets the mlx4_core module&#39;s &#39;log_mtts_per_seq&#39; value.</p>
+</div>
+      
     </li>
   
     <li>
@@ -389,6 +517,12 @@
         <em class="default">(defaults to: <tt>{}</tt>)</em>
       
       
+        &mdash;
+        <div class='inline'>
+<p>This Hash can be used to define <code>infiniband::interface</code>
+resources.</p>
+</div>
+      
     </li>
   
 </ul>
@@ -401,58 +535,58 @@
         <pre class="lines">
 
 
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52</pre>
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106</pre>
       </td>
       <td>
-        <pre class="code"><span class="info file"># File 'manifests/init.pp', line 4</span>
+        <pre class="code"><span class="info file"># File 'manifests/init.pp', line 58</span>
 
 class infiniband (
   Array $extra_packages                 = [],
@@ -482,7 +616,7 @@ class infiniband (
 
   if $manage_mlx4_core_options {
     $real_log_num_mtt = $log_num_mtt ? {
-      Undef   =&gt; calc_log_num_mtt($::memorysize_mb, $log_mtts_per_seg),
+      Undef   =&gt; infiniband::calc_log_num_mtt($facts.dig(&#39;memory&#39;,&#39;system&#39;,&#39;total_bytes&#39;), $log_mtts_per_seg),
       default =&gt; $log_num_mtt,
     }
   }
