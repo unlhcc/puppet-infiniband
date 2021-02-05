@@ -159,6 +159,14 @@ Sets the `SRP_LOAD` setting for the RDMA service.
 
 Default value: 'no'
 
+##### `srpt_load`
+
+Data type: `Enum['yes', 'no']`
+
+Sets the `SRPT_LOAD` setting for the RDMA service
+
+Default value: 'no'
+
 ##### `iser_load`
 
 Data type: `Enum['yes', 'no']`
@@ -167,11 +175,43 @@ Sets the `ISER_LOAD` setting for the RDMA service.
 
 Default value: 'no'
 
+##### `isert_load`
+
+Data type: `Enum['yes', 'no']`
+
+Sets the `ISERT_LOAD` setting for the RDMA service
+
+Default value: 'no'
+
 ##### `rds_load`
 
 Data type: `Enum['yes', 'no']`
 
 Sets the `RDS_LOAD` setting for the RDMA service.
+
+Default value: 'no'
+
+##### `xprtrdma_load`
+
+Data type: `Enum['yes', 'no']`
+
+Sets the `XPRTRDMA_LOAD` setting for the RDMA service
+
+Default value: 'no'
+
+##### `svcrdma_load`
+
+Data type: `Enum['yes', 'no']`
+
+Sets the `SVCRDMA_LOAD` setting for the RDMA service
+
+Default value: 'no'
+
+##### `tech_preview_load`
+
+Data type: `Enum['yes', 'no']`
+
+Sets the `TECH_PREVIEW_LOAD` setting for the RDMA service
 
 Default value: 'no'
 
